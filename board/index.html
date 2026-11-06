@@ -1213,6 +1213,8 @@ document.addEventListener("keydown", e => {
     return;
   }
   if (e.target.closest && e.target.closest("input,textarea")) return;
+  // 노트북: 키보드 B 한 번 (한글 자판 상태의 'ㅠ'도 같은 키라 e.code로 본다)
+  if (PUBLIC && e.code === "KeyB" && !e.ctrlKey && !e.metaKey && !e.altKey && !talk){ e.preventDefault(); unlock("key"); return; }
   if (e.key === "d" || e.key === "D") $("#btnDots").click();
   if (unlocked && (e.key === "t" || e.key === "T")) $("#btnTalk").click();
 });
@@ -1421,11 +1423,16 @@ function unlock(how){
     if (drawing && curS.length) line(curS[curS.length - 1], p);
     curS.push(p);
   }
+  // 획 사이 기다림: 이미 B 모양이면 바로 열고, 아니면 다음 획을 넉넉히 기다린다
+  // (마우스·터치패드는 첫 획을 떼고 다시 위로 가져가는 데 1초 가까이 걸린다)
+  const WAIT_MORE = 1600, WAIT_DONE = 250;
   function end(){
     if (drawing){
-      strokes.push(curS); eatClick = true; setTimeout(() => { eatClick = false; }, 400); armedUntil = Date.now() + 1200;
-      clearTimeout(idle); idle = setTimeout(judge, 650);
-    }
+      strokes.push(curS); eatClick = true; setTimeout(() => { eatClick = false; }, 400); armedUntil = Date.now() + WAIT_MORE;
+      clearTimeout(idle);
+      const already = BRecog.recognize(strokes).ok;
+      idle = setTimeout(judge, already ? WAIT_DONE : WAIT_MORE);
+    } else if (strokes.length){ clearTimeout(idle); idle = setTimeout(judge, WAIT_MORE); } // 그리다 만 클릭이면 다시 기다림
     drawing = false; curS = null; start = null;
     document.body.classList.remove("drawing");
   }
@@ -1448,6 +1455,7 @@ function unlock(how){
   document.addEventListener("pointerdown", e => {
     if (e.pointerType === "touch" || e.button !== 0 || blocked()) return;
     if (e.target.closest(".chat, .toast, button.cp")) return;
+    if (strokes.length) clearTimeout(idle); // 다음 획을 누르는 중에 판정하지 않게
     start = { x: e.clientX, y: e.clientY }; curS = [ start ];
     if (strokes.length && Date.now() < armedUntil) begin();  // B의 두 번째 획은 바로 이어 그리기
   }, true);
@@ -1464,6 +1472,7 @@ function unlock(how){
   document.addEventListener("touchstart", e => {
     if (e.touches.length !== 1 || blocked()) { clearTimeout(hold); return; }
     if (e.target.closest(".chat, .toast, button.cp")) return;
+    if (strokes.length) clearTimeout(idle);
     const t = e.touches[0];
     tStart = { x: t.clientX, y: t.clientY }; curS = [ { ...tStart } ];
     const fits = document.documentElement.scrollHeight <= innerHeight + 60; // 태블릿처럼 한 화면에 다 들어오면 꾹 누를 필요 없음
