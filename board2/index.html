@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=Nanum+Myeongjo:wght@800&display=swap">
 <style>
-/* layout: 학교 업무분장표 한 장 — 왼쪽 업무 칸, 오른쪽 담당 도구. 칸을 누르면 도구(또는 대화)로 들어간다 */
+
 :root{
   --paper:#F4F6F9; --sheet:#FFFFFF; --ink:#17202B; --sub:#5A6575; --line:#D3D9E1; --line-strong:#8F9BAA;
   --head:#EDF1F5; --accent:#0A7BD0; --accent-soft:#E3F0FB; --hover:#F3F7FB;
@@ -69,7 +69,7 @@ body.dots .legend{opacity:1}
   .head{grid-template-columns:1fr;text-align:center}.head h1{grid-column:1}.head .who{justify-self:center}
   table,tbody,tr,th,td{display:block;width:auto}th{border-right:0;padding:10px 12px}
 }
-/* 대화 화면 */
+
 .chat{position:fixed;inset:0;z-index:20;background:var(--scrim);display:flex;align-items:center;justify-content:center;
   padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .panel{width:min(760px,100%);max-height:100%;overflow:auto;background:var(--sheet);border:1px solid var(--line-strong)}
@@ -86,7 +86,7 @@ body.dots .legend{opacity:1}
 .empty{padding:28px 20px;color:var(--sub);text-align:center}
 .open{display:flex;justify-content:flex-end;padding:0 20px 18px}
 .open a{color:var(--accent);font-size:14px}
-/* 대화법 */
+
 .techs{display:none;border-top:1px solid var(--line);padding:14px clamp(14px,2.5vw,28px) 16px}
 body.talk .techs{display:block}
 .techs h3{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--sub);letter-spacing:.02em}
@@ -132,7 +132,7 @@ body.talk .techs{display:block}
 .gapline::before,.gapline::after{content:"";flex:1;border-top:1px dashed var(--line-strong)}
 .ph .cat .when{font-weight:600;color:var(--ink)}
 #chatNext:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-/* B 쓰면 열리는 대화 모드 */
+
 .sheet{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .cell{-webkit-user-drag:none}
 #ink{position:fixed;inset:0;width:100%;height:100%;z-index:30;pointer-events:none;transition:opacity .6s ease}
@@ -157,10 +157,9 @@ body.talk .nm .pv{display:block;margin-top:3px;font-size:12.5px;font-weight:400;
 .cp:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 .lesson .say .cp{color:var(--accent);margin-top:8px}
 #btnTalk[hidden]{display:none}
-/* ===== 시크릿: AI와 대화하기 예시 — 하얀 무대 한가운데 B, 옆으로 넘기면 B들이 원을 그리며 돈다 =====
-   일부러 밝은 단일 테마(두들 그림이 흰 바탕 선화라서). 첫 화면은 가운데 정렬, 장면 화면은 왼쪽 B · 오른쪽 대화창 */
-body.sec-on{background:#FFFFFF;color-scheme:light}
-.secret{
+
+body.dk-on{background:#FFFFFF;color-scheme:light}
+.deck{
   --k-ink:#1D1D1F; --k-sub:#6E6E73; --k-faint:#A1A1A6; --k-line:#E3E3E8; --k-wash:#F5F5F7;
   --k-blue:#0071E3; --k-blue-soft:#EAF3FE; --k-blue-ink:#0060C7; --k-red:#E0352B; --k-green:#1F8A3B;
   --k-font:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
@@ -168,8 +167,8 @@ body.sec-on{background:#FFFFFF;color-scheme:light}
   word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;
   max-width:1240px;margin:0 auto;
 }
-.secret.flip-in{animation:kin .7s cubic-bezier(.2,.8,.2,1) both}
-.secret.flip-out{animation:kout .35s ease-in both}
+.deck.flip-in{animation:kin .7s cubic-bezier(.2,.8,.2,1) both}
+.deck.flip-out{animation:kout .35s ease-in both}
 @keyframes kin{from{opacity:0;transform:scale(.965)}to{opacity:1;transform:none}}
 @keyframes kout{to{opacity:0;transform:scale(.98)}}
 .flip-stage{perspective:1600px}
@@ -178,225 +177,230 @@ body.sec-on{background:#FFFFFF;color-scheme:light}
 @keyframes pgout{to{transform:rotateY(90deg);opacity:.5}}
 @keyframes pgin{from{transform:rotateY(-90deg);opacity:.5}to{transform:none;opacity:1}}
 
-/* 여는 장면: 궤도 */
-.secret .sun{position:absolute;left:50%;top:50%;z-index:100;display:grid;place-items:center;pointer-events:none;will-change:transform,opacity}
-.secret .sun svg{width:100%;height:100%;overflow:visible}
-.secret .sun b{display:grid;place-items:center;width:100%;height:100%;border:9px solid #F08C00;border-radius:50%;font-size:64px;font-weight:800;color:var(--k-ink)}
-.secret .orbit-line{position:absolute;left:50%;top:50%;z-index:1;border:2px dashed rgba(240,140,0,.55);border-radius:50%;pointer-events:none;opacity:0}
-.secret.intro .k-hero,.secret.intro .k-info,.secret.intro .k-common,.secret.intro .k-note,.secret.intro .arrow,.secret.intro .floor{opacity:0;transition:opacity .5s ease}
-.secret.intro.intro-out .k-hero,.secret.intro.intro-out .k-info,.secret.intro.intro-out .k-common,.secret.intro.intro-out .k-note,.secret.intro.intro-out .arrow,.secret.intro.intro-out .floor{opacity:1}
-.secret.intro .ring{cursor:default}
 
-/* 위 막대 */
-.secret .k-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 0 10px;border-bottom:1px solid var(--k-line);font-size:14px}
-.secret .k-nav .me{font-weight:700;letter-spacing:-.01em}
-.secret .k-nav .me b{display:inline-grid;place-items:center;width:22px;height:22px;margin-left:4px;border:1.5px solid #F08C00;border-radius:50%;font-size:13px}
-.secret .k-link{font:inherit;font-size:14px;color:var(--k-blue);background:none;border:0;padding:6px 2px;cursor:pointer}
-.secret .k-link:hover{text-decoration:underline}
-.secret button:focus-visible,.secret a:focus-visible,.secret .ring:focus-visible{outline:3px solid var(--k-blue);outline-offset:3px;border-radius:8px}
+.deck .sun{position:absolute;left:50%;top:50%;z-index:100;display:grid;place-items:center;pointer-events:none;will-change:transform,opacity}
+.deck .sun svg{width:100%;height:100%;overflow:visible}
+.deck .sun b{display:grid;place-items:center;width:100%;height:100%;border:9px solid #F08C00;border-radius:50%;font-size:64px;font-weight:800;color:var(--k-ink)}
+.deck .orbit-line{position:absolute;left:50%;top:50%;z-index:1;transform:translate(-50%,-50%);overflow:visible;pointer-events:none}
+.deck .orbit-line path{fill:none;stroke:#F08C00;stroke-opacity:.6;stroke-width:2;stroke-dasharray:7 7;stroke-linecap:round}
+.deck .pusher{position:absolute;left:50%;top:50%;z-index:260;pointer-events:none;will-change:transform,opacity}
+.deck .pusher img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.deck .pusher[data-f="1"] img:last-child,.deck .pusher[data-f="2"] img:first-child{visibility:hidden}
+.deck .pusher.mirror img{transform:scaleX(-1)}
+.deck.intro .k-hero,.deck.intro .k-info,.deck.intro .k-common,.deck.intro .k-note,.deck.intro .arrow,.deck.intro .floor{opacity:0;transition:opacity .5s ease}
+.deck.intro.intro-out .k-hero,.deck.intro.intro-out .k-info,.deck.intro.intro-out .k-common,.deck.intro.intro-out .k-note,.deck.intro.intro-out .arrow,.deck.intro.intro-out .floor{opacity:1}
+.deck.intro .ring{cursor:default}
 
-/* 첫 화면 */
-.secret .k-hero{text-align:center;padding:clamp(22px,3.6vw,44px) 0 0}
-.secret .k-hero h1{margin:0;font-size:clamp(40px,6.4vw,76px);font-weight:800;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
-.secret .k-hero p{margin:14px auto 0;max-width:30em;font-size:clamp(17px,1.7vw,21px);color:var(--k-sub);line-height:1.5}
-.secret .ring-wrap{position:relative;margin-top:clamp(8px,2vw,20px);overflow-x:clip}
-.secret table{display:table;width:auto}.secret tbody{display:table-row-group}.secret tr{display:table-row}.secret th,.secret td{display:table-cell;width:auto}
-.secret .ring{position:relative;height:clamp(280px,34vw,400px);touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
-.secret .ring.drag{cursor:grabbing}
-.secret .ri{position:absolute;left:50%;top:50%;width:clamp(220px,30vw,380px);height:clamp(220px,30vw,380px);padding:0;border:0;background:none;cursor:pointer;
+
+.deck .k-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 0 10px;border-bottom:1px solid var(--k-line);font-size:14px}
+.deck .k-nav .me{font-weight:700;letter-spacing:-.01em}
+.deck .k-nav .me b{display:inline-grid;place-items:center;width:22px;height:22px;margin-left:4px;border:1.5px solid #F08C00;border-radius:50%;font-size:13px}
+.deck .k-link{font:inherit;font-size:14px;color:var(--k-blue);background:none;border:0;padding:6px 2px;cursor:pointer}
+.deck .k-link:hover{text-decoration:underline}
+.deck button:focus-visible,.deck a:focus-visible,.deck .ring:focus-visible{outline:3px solid var(--k-blue);outline-offset:3px;border-radius:8px}
+
+
+.deck .k-hero{text-align:center;padding:clamp(22px,3.6vw,44px) 0 0}
+.deck .k-hero h1{margin:0;font-size:clamp(40px,6.4vw,76px);font-weight:800;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
+.deck .k-hero p{margin:14px auto 0;max-width:30em;font-size:clamp(17px,1.7vw,21px);color:var(--k-sub);line-height:1.5}
+.deck .ring-wrap{position:relative;margin-top:clamp(8px,2vw,20px);overflow-x:clip}
+.deck table{display:table;width:auto}.deck tbody{display:table-row-group}.deck tr{display:table-row}.deck th,.deck td{display:table-cell;width:auto}
+.deck .ring{position:relative;height:clamp(280px,34vw,400px);touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.deck .ring.drag{cursor:grabbing}
+.deck .ri{position:absolute;left:50%;top:50%;width:clamp(220px,30vw,380px);height:clamp(220px,30vw,380px);padding:0;border:0;background:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;will-change:transform,opacity,filter;-webkit-tap-highlight-color:transparent}
-.secret .ri img{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
-.secret .ri .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:72%;aspect-ratio:1;border-radius:50%;background:var(--k-wash);color:#C7C7CC;font-size:clamp(64px,9vw,120px);font-weight:800;line-height:1;letter-spacing:-.04em}
-.secret .ri .ph small{font-size:14px;font-weight:500;letter-spacing:0;color:var(--k-faint)}
-.secret .floor{position:absolute;left:50%;bottom:6%;width:min(70%,560px);height:26px;transform:translateX(-50%);border-radius:50%;
+.deck .ri img{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
+.deck .ri .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:72%;aspect-ratio:1;border-radius:50%;background:var(--k-wash);color:#C7C7CC;font-size:clamp(64px,9vw,120px);font-weight:800;line-height:1;letter-spacing:-.04em}
+.deck .ri .ph small{font-size:14px;font-weight:500;letter-spacing:0;color:var(--k-faint)}
+.deck .floor{position:absolute;left:50%;bottom:6%;width:min(70%,560px);height:26px;transform:translateX(-50%);border-radius:50%;
   background:radial-gradient(closest-side,rgba(0,0,0,.09),rgba(0,0,0,0));pointer-events:none}
-.secret .arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:0;background:var(--k-wash);color:var(--k-ink);
+.deck .arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:0;background:var(--k-wash);color:var(--k-ink);
   font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:background .2s}
-.secret .arrow:hover{background:#E8E8ED}
-.secret .arrow.l{left:0}.secret .arrow.r{right:0}
-.secret .k-info{text-align:center;padding:0 0 8px}
-.secret .k-info h2{margin:0;font-size:clamp(30px,4.2vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.12;white-space:pre-line;min-height:2.24em;display:flex;align-items:center;justify-content:center}
-.secret .k-info h2.swap{animation:kswap .45s cubic-bezier(.2,.8,.2,1) both}
+.deck .arrow:hover{background:#E8E8ED}
+.deck .arrow.l{left:0}.deck .arrow.r{right:0}
+.deck .k-info{text-align:center;padding:0 0 8px}
+.deck .k-info h2{margin:0;font-size:clamp(30px,4.2vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.12;white-space:pre-line;min-height:2.24em;display:flex;align-items:center;justify-content:center}
+.deck .k-info h2.swap{animation:kswap .45s cubic-bezier(.2,.8,.2,1) both}
 @keyframes kswap{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.secret .meths{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px auto 0;max-width:720px;min-height:34px}
-.secret .meths span{font-size:14px;color:var(--k-blue-ink);background:var(--k-blue-soft);padding:6px 12px;border-radius:999px}
-.secret .cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font:inherit;font-size:17px;font-weight:600;color:#FFFFFF;background:var(--k-blue);border:0;border-radius:999px;padding:12px 26px;cursor:pointer;transition:background .2s,transform .2s}
-.secret .cta:hover{background:#0077ED}
-.secret .cta:active{transform:scale(.97)}
-.secret .dots{display:flex;justify-content:center;gap:10px;margin:26px 0 0}
-.secret .dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:#D2D2D7;cursor:pointer;transition:background .2s,width .3s}
-.secret .dots button[aria-current="true"]{background:var(--k-ink);width:22px;border-radius:4px}
-.secret .k-common{margin:clamp(36px,6vw,64px) auto 0;padding:22px 0 8px;border-top:1px solid var(--k-line);display:grid;grid-template-columns:repeat(4,1fr);gap:18px;text-align:left}
-.secret .k-common div{font-size:15px;line-height:1.5;color:var(--k-sub)}
-.secret .k-common b{display:block;color:var(--k-ink);font-size:17px;margin-bottom:4px;letter-spacing:-.01em}
-.secret .k-note{margin:18px 0 0;font-size:12px;color:var(--k-faint);text-align:center}
-.secret .k-note + .k-note{margin-top:4px}
+.deck .meths{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px auto 0;max-width:720px;min-height:34px}
+.deck .meths span{font-size:14px;color:var(--k-blue-ink);background:var(--k-blue-soft);padding:6px 12px;border-radius:999px}
+.deck .cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font:inherit;font-size:17px;font-weight:600;color:#FFFFFF;background:var(--k-blue);border:0;border-radius:999px;padding:12px 26px;cursor:pointer;transition:background .2s,transform .2s}
+.deck .cta:hover{background:#0077ED}
+.deck .cta:active{transform:scale(.97)}
+.deck .dots{display:flex;justify-content:center;gap:10px;margin:26px 0 0}
+.deck .dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:#D2D2D7;cursor:pointer;transition:background .2s,width .3s}
+.deck .dots button[aria-current="true"]{background:var(--k-ink);width:22px;border-radius:4px}
+.deck .k-common{margin:clamp(36px,6vw,64px) auto 0;padding:22px 0 8px;border-top:1px solid var(--k-line);display:grid;grid-template-columns:repeat(4,1fr);gap:18px;text-align:left}
+.deck .k-common div{font-size:15px;line-height:1.5;color:var(--k-sub)}
+.deck .k-common b{display:block;color:var(--k-ink);font-size:17px;margin-bottom:4px;letter-spacing:-.01em}
+.deck .k-note{margin:18px 0 0;font-size:12px;color:var(--k-faint);text-align:center}
+.deck .k-note + .k-note{margin-top:4px}
 
-/* 장면 화면 */
-.secret .s-scene{display:grid;grid-template-columns:minmax(260px,40%) 1fr;gap:clamp(18px,3vw,44px);padding:clamp(18px,3vw,34px) 0 10px;align-items:start}
-.secret .bside{position:sticky;top:12px;display:flex;flex-direction:column;gap:14px;min-width:0}
-.secret .bpic{height:clamp(220px,28vw,340px);display:flex;align-items:center;justify-content:center}
-.secret .bpic img{max-width:100%;max-height:100%;object-fit:contain}
-.secret .bpic .ph{display:grid;place-items:center;width:min(78%,300px);aspect-ratio:1;border-radius:50%;background:var(--k-wash);color:var(--k-faint);font-size:96px;font-weight:800}
-.secret .s-scene.enter .bpic{animation:slideB .75s cubic-bezier(.2,.8,.2,1) both}
+
+.deck .s-scene{display:grid;grid-template-columns:minmax(260px,40%) 1fr;gap:clamp(18px,3vw,44px);padding:clamp(18px,3vw,34px) 0 10px;align-items:start}
+.deck .bside{position:sticky;top:12px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.deck .bpic{height:clamp(220px,28vw,340px);display:flex;align-items:center;justify-content:center}
+.deck .bpic img{max-width:100%;max-height:100%;object-fit:contain}
+.deck .bpic .ph{display:grid;place-items:center;width:min(78%,300px);aspect-ratio:1;border-radius:50%;background:var(--k-wash);color:var(--k-faint);font-size:96px;font-weight:800}
+.deck .s-scene.enter .bpic{animation:slideB .75s cubic-bezier(.2,.8,.2,1) both}
 @keyframes slideB{from{transform:translateX(60%) scale(1.18);opacity:.5}to{transform:none;opacity:1}}
-.secret .bubble{min-height:150px}
-.secret .bubble .q0{font-size:15px;color:var(--k-sub);margin-bottom:6px}
-.secret .bubble .say{font-size:clamp(20px,2vw,26px);font-weight:700;line-height:1.35;letter-spacing:-.02em;color:var(--k-ink);white-space:pre-line;animation:kswap .4s ease both}
-.secret .bubble .hook{font-size:clamp(32px,3.6vw,48px);font-weight:800;line-height:1.1;letter-spacing:-.035em;color:var(--k-ink);white-space:pre-line;animation:kswap .45s cubic-bezier(.2,.8,.2,1) both}
-.secret .bubble .hook::after{content:"";display:block;width:56px;height:5px;margin-top:14px;border-radius:3px;background:var(--k-red)}
-.secret .bubble .sub{margin-top:12px;font-size:17px;line-height:1.5;color:var(--k-sub)}
-.secret .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
-.secret .ctl .hint{font-size:13px;color:var(--k-faint)}
+.deck .bubble{min-height:150px}
+.deck .bubble .q0{font-size:15px;color:var(--k-sub);margin-bottom:6px}
+.deck .bubble .say{font-size:clamp(20px,2vw,26px);font-weight:700;line-height:1.35;letter-spacing:-.02em;color:var(--k-ink);white-space:pre-line;animation:kswap .4s ease both}
+.deck .bubble .hook{font-size:clamp(32px,3.6vw,48px);font-weight:800;line-height:1.1;letter-spacing:-.035em;color:var(--k-ink);white-space:pre-line;animation:kswap .45s cubic-bezier(.2,.8,.2,1) both}
+.deck .bubble .hook::after{content:"";display:block;width:56px;height:5px;margin-top:14px;border-radius:3px;background:var(--k-red)}
+.deck .bubble .sub{margin-top:12px;font-size:17px;line-height:1.5;color:var(--k-sub)}
+.deck .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
+.deck .ctl .hint{font-size:13px;color:var(--k-faint)}
 
-.secret .chatbox{display:flex;flex-direction:column;border-radius:22px;background:#FFFFFF;min-width:0;overflow:hidden;
+.deck .chatbox{display:flex;flex-direction:column;border-radius:22px;background:#FFFFFF;min-width:0;overflow:hidden;
   box-shadow:0 0 0 1px var(--k-line),0 24px 60px -24px rgba(29,29,31,.28);height:min(660px,calc(100vh - 150px));min-height:460px}
-.secret .cbar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--k-line);font-size:13px;color:var(--k-sub)}
-.secret .cbar i{width:11px;height:11px;border-radius:50%;background:#E3E3E8}
-.secret .cbar b{margin-left:8px;color:var(--k-ink);font-weight:600}
-.secret .cbar span{margin-left:auto;font-variant-numeric:tabular-nums}
-.secret .log{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px;position:relative;background:#FBFBFD}
-.secret .m{max-width:84%;padding:11px 15px;border-radius:20px;font-size:15.5px;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere;animation:pop .28s ease-out both;transition:opacity .4s}
-.secret .m.t{align-self:flex-end;background:var(--k-blue);color:#FFFFFF;border-bottom-right-radius:6px}
-.secret .m.ai{align-self:flex-start;background:#FFFFFF;box-shadow:0 0 0 1px var(--k-line);border-bottom-left-radius:6px}
-.secret .m.old,.secret .divider.old{opacity:.32}
-.secret .m .dots3{display:inline-flex;gap:4px;padding:5px 0}
-.secret .m .dots3 i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.35;animation:blink 1s infinite}
-.secret .m .dots3 i:nth-child(2){animation-delay:.15s}.secret .m .dots3 i:nth-child(3){animation-delay:.3s}
-.secret .divider{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--k-faint);margin:6px 0;animation:pop .3s ease-out both}
-.secret .divider::before,.secret .divider::after{content:"";flex:1;border-top:1px solid var(--k-line)}
-.secret .divider.again{font-size:15px;font-weight:700;color:var(--k-ink)}
-.secret .composer{border-top:1px solid var(--k-line);background:#FFFFFF;padding:12px 14px;display:flex;gap:10px;align-items:flex-end}
-.secret .composer .box{flex:1;min-height:44px;max-height:190px;overflow:auto;padding:10px 14px;border-radius:22px;background:var(--k-wash);font-size:15.5px;line-height:1.5;white-space:pre-line}
-.secret .composer .box:empty::before{content:"메시지를 입력하세요";color:var(--k-faint)}
-.secret .composer .send{flex:none;width:40px;height:40px;border-radius:50%;background:var(--k-ink);color:#FFFFFF;display:grid;place-items:center;font-size:17px;transition:transform .15s}
-.secret .composer .send.go{transform:scale(.85)}
-.secret .seg{display:block}
-.secret .seg + .seg{margin-top:10px}
-.secret .seg .lab{display:inline-flex;align-items:center;gap:6px;margin-bottom:3px;font-size:12.5px;font-weight:600;color:var(--k-blue-ink);background:var(--k-blue-soft);padding:2px 10px;border-radius:999px;animation:pop .3s ease-out both}
-.secret .m.t .seg .lab{background:#FFFFFF;color:var(--k-blue-ink)}
-.secret .file{display:inline-flex;align-items:center;gap:7px;margin:2px 0 4px;padding:5px 11px;font-size:13px;border-radius:10px;background:#FFFFFF;box-shadow:0 0 0 1px var(--k-line);color:var(--k-ink);animation:pop .3s ease-out both}
-.secret .file::before{content:"";width:10px;height:12px;border:1.5px solid currentColor;border-radius:2px}
-.secret .m.t .file{background:rgba(255,255,255,.18);box-shadow:0 0 0 1px rgba(255,255,255,.5);color:#FFFFFF}
+.deck .cbar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--k-line);font-size:13px;color:var(--k-sub)}
+.deck .cbar i{width:11px;height:11px;border-radius:50%;background:#E3E3E8}
+.deck .cbar b{margin-left:8px;color:var(--k-ink);font-weight:600}
+.deck .cbar span{margin-left:auto;font-variant-numeric:tabular-nums}
+.deck .log{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px;position:relative;background:#FBFBFD}
+.deck .m{max-width:84%;padding:11px 15px;border-radius:20px;font-size:15.5px;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere;animation:pop .28s ease-out both;transition:opacity .4s}
+.deck .m.t{align-self:flex-end;background:var(--k-blue);color:#FFFFFF;border-bottom-right-radius:6px}
+.deck .m.ai{align-self:flex-start;background:#FFFFFF;box-shadow:0 0 0 1px var(--k-line);border-bottom-left-radius:6px}
+.deck .m.old,.deck .divider.old{opacity:.32}
+.deck .m .dots3{display:inline-flex;gap:4px;padding:5px 0}
+.deck .m .dots3 i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.35;animation:blink 1s infinite}
+.deck .m .dots3 i:nth-child(2){animation-delay:.15s}.deck .m .dots3 i:nth-child(3){animation-delay:.3s}
+.deck .divider{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--k-faint);margin:6px 0;animation:pop .3s ease-out both}
+.deck .divider::before,.deck .divider::after{content:"";flex:1;border-top:1px solid var(--k-line)}
+.deck .divider.again{font-size:15px;font-weight:700;color:var(--k-ink)}
+.deck .composer{border-top:1px solid var(--k-line);background:#FFFFFF;padding:12px 14px;display:flex;gap:10px;align-items:flex-end}
+.deck .composer .box{flex:1;min-height:44px;max-height:190px;overflow:auto;padding:10px 14px;border-radius:22px;background:var(--k-wash);font-size:15.5px;line-height:1.5;white-space:pre-line}
+.deck .composer .box:empty::before{content:"메시지를 입력하세요";color:var(--k-faint)}
+.deck .composer .send{flex:none;width:40px;height:40px;border-radius:50%;background:var(--k-ink);color:#FFFFFF;display:grid;place-items:center;font-size:17px;transition:transform .15s}
+.deck .composer .send.go{transform:scale(.85)}
+.deck .seg{display:block}
+.deck .seg + .seg{margin-top:10px}
+.deck .seg .lab{display:inline-flex;align-items:center;gap:6px;margin-bottom:3px;font-size:12.5px;font-weight:600;color:var(--k-blue-ink);background:var(--k-blue-soft);padding:2px 10px;border-radius:999px;animation:pop .3s ease-out both}
+.deck .m.t .seg .lab{background:#FFFFFF;color:var(--k-blue-ink)}
+.deck .file{display:inline-flex;align-items:center;gap:7px;margin:2px 0 4px;padding:5px 11px;font-size:13px;border-radius:10px;background:#FFFFFF;box-shadow:0 0 0 1px var(--k-line);color:var(--k-ink);animation:pop .3s ease-out both}
+.deck .file::before{content:"";width:10px;height:12px;border:1.5px solid currentColor;border-radius:2px}
+.deck .m.t .file{background:rgba(255,255,255,.18);box-shadow:0 0 0 1px rgba(255,255,255,.5);color:#FFFFFF}
 
-/* AI 답 속 예시 */
-.secret .pv-doc,.secret .pv-table,.secret .pv-list,.secret .pv-memo,.secret .pv-slide{white-space:normal}
-.secret .pv-doc b{display:block;font-size:16px;margin-bottom:6px}
-.secret dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0}
-.secret dt{color:var(--k-sub)} .secret dd{margin:0}
-.secret .pv-doc p,.secret .pv-table p,.secret .pv-list p,.secret .pv-memo p{margin:6px 0 0}
-.secret .pv-list p:first-child,.secret .pv-memo p:first-child{margin-top:0}
-.secret .pv-table table{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;margin-top:4px}
-.secret .pv-table th,.secret .pv-table td{border:1px solid var(--k-line);padding:3px 8px;text-align:center}
-.secret .pv-table th{background:var(--k-wash);font-weight:600}
-.secret .pv-table td.hot{background:#FDE7E5;color:var(--k-red);font-weight:700}
-.secret .pv-table td.q{background:#FFF4C2;font-weight:700}
-.secret .ok{color:var(--k-green);font-weight:600}
-.secret .src{color:var(--k-sub);font-style:italic}
-.secret .pv-phone{display:flex;justify-content:center;padding:4px 0}
-.secret .pv-phone .scr{width:200px;border:7px solid var(--k-ink);border-radius:26px;padding:16px 12px 12px;background:#FFFFFF;font-size:13px}
-.secret .pv-phone .scr b{display:block;font-size:15px;margin-bottom:8px}
-.secret .pv-phone .kakao{display:block;margin-top:10px;text-align:center;font-size:12px;font-weight:600;background:#FEE500;color:#191919;border-radius:8px;padding:6px}
-.secret .pv-sheet{display:inline-flex;gap:6px;flex-wrap:wrap;margin:0 0 4px}
-.secret .pv-sheet i{font-style:normal;font-size:12px;padding:2px 7px;border-radius:6px;background:rgba(255,255,255,.2);box-shadow:0 0 0 1px rgba(255,255,255,.45)}
-.secret .pv-memo{border-left:3px solid var(--k-ink);padding-left:10px}
-.secret .pv-memo b{display:block;font-size:12px;color:var(--k-sub)}
-.secret .pv-slide{font-size:9.5px;line-height:1.35}
-.secret .pv-slide b{font-size:11px}
-.secret .pv-slide ul{margin:4px 0 0;padding-left:14px}
-.secret .pv-tv{display:grid;gap:8px;justify-items:center;padding:14px;border:9px solid var(--k-ink);border-radius:10px;background:#FFFFFF}
-.secret .pv-tv svg{width:min(260px,100%)}
-.secret .pv-tv .tvtxt{text-align:center}
-.secret .pv-tv .tvtxt b{display:block;font-size:22px}
-.secret .pv-tv .tvtxt span{font-size:16px;color:var(--k-sub)}
-.secret .pv-tv small{font-size:11px;color:var(--k-sub)}
-.secret .pv-board svg{width:min(300px,100%);display:block}
-.secret .pv-board .btns{display:flex;gap:6px;margin-top:6px}
-.secret .pv-board .btns span{font-size:12px;padding:3px 9px;border-radius:999px;box-shadow:0 0 0 1px var(--k-line)}
-.secret .pen{position:absolute;pointer-events:none;overflow:visible}
-.secret .pen path{fill:none;stroke:var(--k-red);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 
-/* 장면 끝 */
-.secret .endbar{display:grid;gap:12px;padding:14px 16px 16px;border-top:1px solid var(--k-line);background:#FFFFFF;animation:pop .35s ease-out both}
-.secret .endbar .meth{display:flex;flex-wrap:wrap;gap:6px}
-.secret .endbar .meth span{font-size:12.5px;font-weight:600;color:var(--k-blue-ink);background:var(--k-blue-soft);padding:3px 10px;border-radius:999px}
-.secret .endbar .first{padding:12px 14px;border-radius:14px;background:var(--k-wash);font-size:14.5px;line-height:1.6}
-.secret .endbar .first small{display:block;font-size:12px;color:var(--k-sub);margin-bottom:3px}
-.secret .endbar .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.secret .endbar .row a{color:var(--k-blue);font-size:14px}
-.secret .endbar button{font:inherit;font-size:14px;font-weight:600;border-radius:999px;padding:9px 18px;cursor:pointer;border:0;background:var(--k-wash);color:var(--k-ink)}
-.secret .endbar button.primary{background:var(--k-blue);color:#FFFFFF}
-.secret .endbar .tips b{font-size:14px}
-.secret .endbar ul{margin:4px 0 0;padding-left:18px;font-size:14px;line-height:1.6;color:var(--k-sub)}
+.deck .pv-doc,.deck .pv-table,.deck .pv-list,.deck .pv-memo,.deck .pv-slide{white-space:normal}
+.deck .pv-doc b{display:block;font-size:16px;margin-bottom:6px}
+.deck dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0}
+.deck dt{color:var(--k-sub)} .deck dd{margin:0}
+.deck .pv-doc p,.deck .pv-table p,.deck .pv-list p,.deck .pv-memo p{margin:6px 0 0}
+.deck .pv-list p:first-child,.deck .pv-memo p:first-child{margin-top:0}
+.deck .pv-table table{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;margin-top:4px}
+.deck .pv-table th,.deck .pv-table td{border:1px solid var(--k-line);padding:3px 8px;text-align:center}
+.deck .pv-table th{background:var(--k-wash);font-weight:600}
+.deck .pv-table td.hot{background:#FDE7E5;color:var(--k-red);font-weight:700}
+.deck .pv-table td.q{background:#FFF4C2;font-weight:700}
+.deck .ok{color:var(--k-green);font-weight:600}
+.deck .src{color:var(--k-sub);font-style:italic}
+.deck .pv-phone{display:flex;justify-content:center;padding:4px 0}
+.deck .pv-phone .scr{width:200px;border:7px solid var(--k-ink);border-radius:26px;padding:16px 12px 12px;background:#FFFFFF;font-size:13px}
+.deck .pv-phone .scr b{display:block;font-size:15px;margin-bottom:8px}
+.deck .pv-phone .kakao{display:block;margin-top:10px;text-align:center;font-size:12px;font-weight:600;background:#FEE500;color:#191919;border-radius:8px;padding:6px}
+.deck .pv-sheet{display:inline-flex;gap:6px;flex-wrap:wrap;margin:0 0 4px}
+.deck .pv-sheet i{font-style:normal;font-size:12px;padding:2px 7px;border-radius:6px;background:rgba(255,255,255,.2);box-shadow:0 0 0 1px rgba(255,255,255,.45)}
+.deck .pv-memo{border-left:3px solid var(--k-ink);padding-left:10px}
+.deck .pv-memo b{display:block;font-size:12px;color:var(--k-sub)}
+.deck .pv-slide{font-size:9.5px;line-height:1.35}
+.deck .pv-slide b{font-size:11px}
+.deck .pv-slide ul{margin:4px 0 0;padding-left:14px}
+.deck .pv-tv{display:grid;gap:8px;justify-items:center;padding:14px;border:9px solid var(--k-ink);border-radius:10px;background:#FFFFFF}
+.deck .pv-tv svg{width:min(260px,100%)}
+.deck .pv-tv .tvtxt{text-align:center}
+.deck .pv-tv .tvtxt b{display:block;font-size:22px}
+.deck .pv-tv .tvtxt span{font-size:16px;color:var(--k-sub)}
+.deck .pv-tv small{font-size:11px;color:var(--k-sub)}
+.deck .pv-board svg{width:min(300px,100%);display:block}
+.deck .pv-board .btns{display:flex;gap:6px;margin-top:6px}
+.deck .pv-board .btns span{font-size:12px;padding:3px 9px;border-radius:999px;box-shadow:0 0 0 1px var(--k-line)}
+.deck .pen{position:absolute;pointer-events:none;overflow:visible}
+.deck .pen path{fill:none;stroke:var(--k-red);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+
+
+.deck .endbar{display:grid;gap:12px;padding:14px 16px 16px;border-top:1px solid var(--k-line);background:#FFFFFF;animation:pop .35s ease-out both}
+.deck .endbar .meth{display:flex;flex-wrap:wrap;gap:6px}
+.deck .endbar .meth span{font-size:12.5px;font-weight:600;color:var(--k-blue-ink);background:var(--k-blue-soft);padding:3px 10px;border-radius:999px}
+.deck .endbar .first{padding:12px 14px;border-radius:14px;background:var(--k-wash);font-size:14.5px;line-height:1.6}
+.deck .endbar .first small{display:block;font-size:12px;color:var(--k-sub);margin-bottom:3px}
+.deck .endbar .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.deck .endbar .row a{color:var(--k-blue);font-size:14px}
+.deck .endbar button{font:inherit;font-size:14px;font-weight:600;border-radius:999px;padding:9px 18px;cursor:pointer;border:0;background:var(--k-wash);color:var(--k-ink)}
+.deck .endbar button.primary{background:var(--k-blue);color:#FFFFFF}
+.deck .endbar .tips b{font-size:14px}
+.deck .endbar ul{margin:4px 0 0;padding-left:18px;font-size:14px;line-height:1.6;color:var(--k-sub)}
 
 @media (max-width:760px){
-  .secret .arrow{display:none}
-  .secret .k-common{grid-template-columns:1fr 1fr}
-  .secret .s-scene{grid-template-columns:1fr;padding-top:12px}
-  .secret .bside{position:static;display:grid;grid-template-columns:96px 1fr;align-items:center;gap:12px}
-  .secret .bpic{height:110px}
-  .secret .bpic .ph{font-size:44px}
-  .secret .bubble{min-height:0}
-  .secret .bubble .q0{display:none}
-  .secret .bubble .say{font-size:17px}
-  .secret .bubble .hook{font-size:24px}
-  .secret .bubble .hook::after{margin-top:8px;width:40px;height:4px}
-  .secret .bubble .sub{font-size:14px;margin-top:6px}
-  .secret .ctl{grid-column:1/-1}
-  .secret .chatbox{height:min(560px,calc(100vh - 220px));min-height:380px;border-radius:18px}
-  .secret .m{max-width:94%}
+  .deck .arrow{display:none}
+  .deck .k-common{grid-template-columns:1fr 1fr}
+  .deck .s-scene{grid-template-columns:1fr;padding-top:12px}
+  .deck .bside{position:static;display:grid;grid-template-columns:96px 1fr;align-items:center;gap:12px}
+  .deck .bpic{height:110px}
+  .deck .bpic .ph{font-size:44px}
+  .deck .bubble{min-height:0}
+  .deck .bubble .q0{display:none}
+  .deck .bubble .say{font-size:17px}
+  .deck .bubble .hook{font-size:24px}
+  .deck .bubble .hook::after{margin-top:8px;width:40px;height:4px}
+  .deck .bubble .sub{font-size:14px;margin-top:6px}
+  .deck .ctl{grid-column:1/-1}
+  .deck .chatbox{height:min(560px,calc(100vh - 220px));min-height:380px;border-radius:18px}
+  .deck .m{max-width:94%}
 }
-@media (prefers-reduced-motion:reduce){.secret *{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){.deck *{animation:none!important;transition:none!important}}
 
-/* ===== 화면 크기 자동 맞춤: 가로(vw)와 세로(vh) 중 작은 쪽을 따라간다 ===== */
-.secret{--vh:1vh;max-width:min(1680px,max(1240px,84vw))}
-@supports (height:1svh){.secret{--vh:1svh}}
-.secret .k-nav{font-size:clamp(14px,.35vw + 9px,17px)}
-.secret .k-hero{padding-top:clamp(10px,calc(var(--vh)*3.4),48px)}
-.secret .k-hero h1{font-size:clamp(30px,min(6.4vw,calc(var(--vh)*7.6)),104px)}
-.secret .k-hero p{margin-top:clamp(6px,calc(var(--vh)*1.4),16px);font-size:clamp(15px,min(1.7vw,calc(var(--vh)*2.4)),25px)}
-.secret .ring-wrap{margin-top:clamp(4px,calc(var(--vh)*1.5),20px)}
-.secret .ring{height:clamp(180px,min(50vw,calc(var(--vh)*40)),640px)}
-.secret .ri{width:clamp(150px,min(42vw,calc(var(--vh)*37)),580px);height:clamp(150px,min(42vw,calc(var(--vh)*37)),580px)}
-.secret .k-info h2{font-size:clamp(22px,min(4.2vw,calc(var(--vh)*5)),68px)}
-.secret .meths{margin-top:clamp(8px,calc(var(--vh)*1.5),16px)}
-.secret .meths span{font-size:clamp(13px,.3vw + 9px,17px)}
-.secret .cta{margin-top:clamp(10px,calc(var(--vh)*2.4),28px);font-size:clamp(16px,.35vw + 11px,21px);padding:clamp(10px,calc(var(--vh)*1.4),16px) clamp(22px,2vw,34px)}
-.secret .dots{margin-top:clamp(12px,calc(var(--vh)*2.6),28px)}
-.secret .k-common div{font-size:clamp(14px,.3vw + 10px,18px)}
-.secret .k-common b{font-size:clamp(16px,.35vw + 11px,21px)}
-/* 장면 */
-.secret .s-scene{padding-top:clamp(12px,calc(var(--vh)*3),36px)}
-.secret .bpic{height:clamp(110px,min(28vw,calc(var(--vh)*34)),460px)}
-.secret .bubble .say{font-size:clamp(18px,min(2vw,calc(var(--vh)*3)),32px)}
-.secret .bubble .hook{font-size:clamp(24px,min(3.6vw,calc(var(--vh)*5.6)),64px)}
-.secret .bubble .sub{font-size:clamp(14px,.4vw + 11px,21px)}
-.secret .chatbox{height:clamp(300px,calc(var(--vh)*100 - 150px),880px);min-height:0}
-.secret .m,.secret .composer .box{font-size:clamp(15px,.45vw + 9px,19px)}
-.secret .pv-phone .scr{width:clamp(190px,14vw,250px)}
+
+.deck{--vh:1vh;max-width:min(1680px,max(1240px,84vw))}
+@supports (height:1svh){.deck{--vh:1svh}}
+.deck .k-nav{font-size:clamp(14px,.35vw + 9px,17px)}
+.deck .k-hero{padding-top:clamp(10px,calc(var(--vh)*3.4),48px)}
+.deck .k-hero h1{font-size:clamp(30px,min(6.4vw,calc(var(--vh)*7.6)),104px)}
+.deck .k-hero p{margin-top:clamp(6px,calc(var(--vh)*1.4),16px);font-size:clamp(15px,min(1.7vw,calc(var(--vh)*2.4)),25px)}
+.deck .ring-wrap{margin-top:clamp(4px,calc(var(--vh)*1.5),20px)}
+.deck .ring{height:clamp(180px,min(50vw,calc(var(--vh)*40)),640px)}
+.deck .ri{width:clamp(150px,min(42vw,calc(var(--vh)*37)),580px);height:clamp(150px,min(42vw,calc(var(--vh)*37)),580px)}
+.deck .k-info h2{font-size:clamp(22px,min(4.2vw,calc(var(--vh)*5)),68px)}
+.deck .meths{margin-top:clamp(8px,calc(var(--vh)*1.5),16px)}
+.deck .meths span{font-size:clamp(13px,.3vw + 9px,17px)}
+.deck .cta{margin-top:clamp(10px,calc(var(--vh)*2.4),28px);font-size:clamp(16px,.35vw + 11px,21px);padding:clamp(10px,calc(var(--vh)*1.4),16px) clamp(22px,2vw,34px)}
+.deck .dots{margin-top:clamp(12px,calc(var(--vh)*2.6),28px)}
+.deck .k-common div{font-size:clamp(14px,.3vw + 10px,18px)}
+.deck .k-common b{font-size:clamp(16px,.35vw + 11px,21px)}
+
+.deck .s-scene{padding-top:clamp(12px,calc(var(--vh)*3),36px)}
+.deck .bpic{height:clamp(110px,min(28vw,calc(var(--vh)*34)),460px)}
+.deck .bubble .say{font-size:clamp(18px,min(2vw,calc(var(--vh)*3)),32px)}
+.deck .bubble .hook{font-size:clamp(24px,min(3.6vw,calc(var(--vh)*5.6)),64px)}
+.deck .bubble .sub{font-size:clamp(14px,.4vw + 11px,21px)}
+.deck .chatbox{height:clamp(300px,calc(var(--vh)*100 - 150px),880px);min-height:0}
+.deck .m,.deck .composer .box{font-size:clamp(15px,.45vw + 9px,19px)}
+.deck .pv-phone .scr{width:clamp(190px,14vw,250px)}
 @media (max-width:760px){
-  .secret .ring{height:clamp(200px,min(72vw,calc(var(--vh)*40)),420px)}
-  .secret .ri{width:clamp(160px,min(62vw,calc(var(--vh)*36)),360px);height:clamp(160px,min(62vw,calc(var(--vh)*36)),360px)}
-  .secret .bpic{height:110px}
-  .secret .bubble .hook{font-size:24px}
-  .secret .bubble .say{font-size:17px}
-  .secret .chatbox{height:clamp(300px,calc(var(--vh)*100 - 280px),640px)}
+  .deck .ring{height:clamp(200px,min(72vw,calc(var(--vh)*40)),420px)}
+  .deck .ri{width:clamp(160px,min(62vw,calc(var(--vh)*36)),360px);height:clamp(160px,min(62vw,calc(var(--vh)*36)),360px)}
+  .deck .bpic{height:110px}
+  .deck .bubble .hook{font-size:24px}
+  .deck .bubble .say{font-size:17px}
+  .deck .chatbox{height:clamp(300px,calc(var(--vh)*100 - 280px),640px)}
 }
-/* 가로로 눕힌 휴대폰처럼 낮은 화면 */
+
 @media (max-height:540px) and (min-width:600px){
-  .secret .k-hero p,.secret .meths{display:none}
-  .secret .k-info h2{white-space:normal;min-height:0}
-  .secret .ring{height:clamp(160px,calc(var(--vh)*46),300px)}
-  .secret .ri{width:clamp(140px,calc(var(--vh)*44),280px);height:clamp(140px,calc(var(--vh)*44),280px)}
-  .secret .dots{margin-top:10px}
-  .secret .s-scene{grid-template-columns:minmax(220px,36%) 1fr;padding-top:10px}
-  .secret .bside{gap:8px}
-  .secret .bpic{height:calc(var(--vh)*30)}
-  .secret .bubble{min-height:0}
-  .secret .bubble .q0{display:none}
-  .secret .bubble .hook{font-size:clamp(20px,calc(var(--vh)*6),30px)}
-  .secret .bubble .sub{font-size:13px;margin-top:6px}
-  .secret .chatbox{height:calc(var(--vh)*100 - 80px)}
+  .deck .k-hero p,.deck .meths{display:none}
+  .deck .k-info h2{white-space:normal;min-height:0}
+  .deck .ring{height:clamp(160px,calc(var(--vh)*46),300px)}
+  .deck .ri{width:clamp(140px,calc(var(--vh)*44),280px);height:clamp(140px,calc(var(--vh)*44),280px)}
+  .deck .dots{margin-top:10px}
+  .deck .s-scene{grid-template-columns:minmax(220px,36%) 1fr;padding-top:10px}
+  .deck .bside{gap:8px}
+  .deck .bpic{height:calc(var(--vh)*30)}
+  .deck .bubble{min-height:0}
+  .deck .bubble .q0{display:none}
+  .deck .bubble .hook{font-size:clamp(20px,calc(var(--vh)*6),30px)}
+  .deck .bubble .sub{font-size:13px;margin-top:6px}
+  .deck .chatbox{height:calc(var(--vh)*100 - 80px)}
 }
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -443,7 +447,7 @@ body.sec-on{background:#FFFFFF;color-scheme:light}
 </div>
 
 <script>
-const PUBLIC = true; // 참가자용(QR) 화면이면 true
+const PUBLIC = true;
 const BASE = "https://bbonng.github.io/";
 
 const TECH = {
@@ -1005,11 +1009,11 @@ const $ = s => document.querySelector(s);
 const href = u => /^https?:/.test(u) ? u : BASE + u + (u.endsWith(".html") ? "" : "/");
 const link = it => PUBLIC && it.demo ? it.demo : (it.url ? href(it.url) : null);
 if (PUBLIC) BOARD.forEach(r => { r.items = r.items.filter(it => it.pub !== false); });
-let unlocked = !PUBLIC;
+let opened = !PUBLIC;
 let talk = !PUBLIC && location.hash === "#talk";
 let flipNext = false;
 let lastFocus = null;
-let cur = null; // {it, mode, shown, lessonShown}
+let cur = null;
 const lines = () => cur ? (cur.mode === "real" ? (cur.it.real || []) : cur.it.chat) : [];
 
 function render(){
@@ -1058,7 +1062,7 @@ function render(){
   });
   document.body.classList.toggle("talk", talk);
   const bt = $("#btnTalk");
-  if (bt){ bt.setAttribute("aria-pressed", String(talk)); bt.textContent = PUBLIC ? "AI와 대화하기 예시" : (talk ? "도구로 보기" : "대화로 보기"); bt.hidden = !unlocked; }
+  if (bt){ bt.setAttribute("aria-pressed", String(talk)); bt.textContent = PUBLIC ? "AI와 대화하기 예시" : (talk ? "도구로 보기" : "대화로 보기"); bt.hidden = !opened; }
   if (PUBLIC){
     const h = document.querySelector(".head h1"), want = talk ? "AI와 대화하기 예시" : "체육교사 업무분장표";
     if (h.textContent !== want){ h.textContent = want; if (flipNext){ h.classList.remove("swap"); void h.offsetWidth; h.classList.add("swap"); } }
@@ -1109,7 +1113,6 @@ let typingTimer = 0;
 function showNext(){
   if (!cur) return;
   const box = $("#chatMsgs");
-  // 아직 '입력 중'이면 바로 보여 주기
   const typing = box.querySelector(".msg.typing");
   if (typing){ clearTimeout(typingTimer); typing.classList.remove("typing"); return; }
   const chat = lines();
@@ -1204,9 +1207,9 @@ $("#chatNext").addEventListener("click", e => { e.stopPropagation(); showNext();
 $("#chat").addEventListener("click", e => {
   if (e.target.id === "chat") return closeChat();
   if (e.target.closest("a,button")) return;
-  showNext(); // 패널 아무 곳이나 누르면 다음 말
+  showNext();
 });
-$("#btnTalk").addEventListener("click", () => { if (PUBLIC){ Secret.open(); return; } talk = !talk; flipNext = true; render(); });
+$("#btnTalk").addEventListener("click", () => { if (PUBLIC){ Deck.open(); return; } talk = !talk; flipNext = true; render(); });
 $("#btnDots").addEventListener("click", () => {
   const on = document.body.classList.toggle("dots");
   $("#btnDots").setAttribute("aria-pressed", String(on));
@@ -1216,16 +1219,14 @@ document.addEventListener("keydown", e => {
   if (open){
     if (e.key === "Escape") return closeChat();
     if (e.key === "r" || e.key === "R"){ setMode(cur && cur.mode === "real" ? "ideal" : "real"); return; }
-    if (e.target.closest && e.target.closest("button,a")) return; // 버튼에 초점이 있으면 버튼이 알아서
+    if (e.target.closest && e.target.closest("button,a")) return;
     if ([" ", "Enter", "ArrowRight", "ArrowDown", "PageDown"].includes(e.key)){ e.preventDefault(); showNext(); }
     else if (e.key === "End"){ e.preventDefault(); while (cur && (cur.shown < lines().length || ((!PUBLIC || talk) && cur.it.tech && !cur.lessonShown))) showNext(); const t = $("#chatMsgs .typing"); if (t) t.classList.remove("typing"); }
     return;
   }
   if (e.target.closest && e.target.closest("input,textarea")) return;
-  // 노트북: 키보드 B 한 번 (한글 자판 상태의 'ㅠ'도 같은 키라 e.code로 본다)
-  if (PUBLIC && e.code === "KeyB" && !e.ctrlKey && !e.metaKey && !e.altKey && !talk){ e.preventDefault(); unlock("key"); return; }
   if (e.key === "d" || e.key === "D") $("#btnDots").click();
-  if (unlocked && (e.key === "t" || e.key === "T")) $("#btnTalk").click();
+  if (opened && (e.key === "t" || e.key === "T")) $("#btnTalk").click();
 });
 if (PUBLIC){
   const n = document.createElement("span"); n.className = "pubnote"; n.textContent = "학생·교사 정보가 담긴 도구는 연수용 예시 화면으로 열려요";
@@ -1233,9 +1234,7 @@ if (PUBLIC){
 }
 renderTechs();
 render();
-// B 손글씨 인식 — $P 점구름 인식기(Vatavu·Anthony·Wobbrock 2012)를 줄여 씀.
-// 획 순서·방향·크기·위치와 상관없이 모양만 비교한다. 외부 라이브러리·네트워크 없음.
-const BRecog = (() => {
+const Shape = (() => {
   const N = 32;
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
@@ -1285,15 +1284,12 @@ const BRecog = (() => {
     return m;
   }
 
-  // ---------- 견본 모양 만들기 ----------
   const arc = (cx, cy, rx, ry, a0, a1, id, k = 14) => Array.from({length: k + 1}, (_, i) => {
     const a = a0 + (a1 - a0) * i / k; return { x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a), id };
   });
   const seg = (x0, y0, x1, y1, id, k = 10) => Array.from({length: k + 1}, (_, i) => ({ x: x0 + (x1 - x0) * i / k, y: y0 + (y1 - y0) * i / k, id }));
   const UP = -Math.PI / 2, DN = Math.PI / 2;
-  // 둥근 배: (0,y0)에서 오른쪽으로 불룩했다가 (0,y1)로 돌아옴
   const bump = (y0, y1, w, id) => arc(0, (y0 + y1) / 2, w, (y1 - y0) / 2, UP, DN, id);
-  // 각진 배: 가로 → 둥근 모서리 → 가로
   const boxBump = (y0, y1, w, id) => { const r = (y1 - y0) / 2; return [...seg(0, y0, w * 0.45, y0, id, 5), ...arc(w * 0.45, (y0 + y1) / 2, w * 0.55, r, UP, DN, id), ...seg(w * 0.45, y1, 0, y1, id, 5)]; };
   const slant = (p, k) => p.map(q => ({ x: q.x + k * (100 - q.y), y: q.y, id: q.id }));
 
@@ -1337,7 +1333,6 @@ const BRecog = (() => {
     ...Object.entries(NEG).map(([k, p]) => ({ name: k, pts: normalize(p) })),
   ];
 
-  // 너그러움: 숫자가 클수록 대충 그려도 열림
   const LIMIT = 1.55;
   function recognize(strokes){
     const pts = []; strokes.forEach((s, i) => s.forEach(q => pts.push({ x: q.x, y: q.y, id: i })));
@@ -1345,8 +1340,8 @@ const BRecog = (() => {
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     for (const q of pts){ minX = Math.min(minX, q.x); maxX = Math.max(maxX, q.x); minY = Math.min(minY, q.y); maxY = Math.max(maxY, q.y); }
     const h = maxY - minY, w = maxX - minX;
-    if (h < 24) return { ok: false, why: "small" };          // 너무 작은 낙서·클릭 떨림은 무시
-    if (w > h * 1.6 || w < h * 0.12) return { ok: false, why: "ratio" }; // B는 세로가 긴 글자
+    if (h < 24) return { ok: false, why: "small" };
+    if (w > h * 1.6 || w < h * 0.12) return { ok: false, why: "ratio" };
     const c = normalize(pts); if (!c) return { ok: false, why: "norm" };
     let best = null, bestD = Infinity, bestNeg = Infinity;
     for (const t of TPL){ const d = match(c, t.pts); if (d < bestD){ bestD = d; best = t.name; } if (t.name !== "B") bestNeg = Math.min(bestNeg, d); }
@@ -1355,7 +1350,6 @@ const BRecog = (() => {
   return { recognize, _shapes: { shapeB, NEG, POS } };
 })();
 
-// ---------- 복사 · 알림 ----------
 async function copyText(text, btn){
   let ok = false;
   try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {}
@@ -1378,25 +1372,22 @@ function toast(msg){
   toastTimer = setTimeout(() => { t.classList.add("out"); setTimeout(() => t.remove(), 450); }, 4200);
 }
 
-// ---------- 열기 ----------
-function unlock(how, from){
-  if (Secret.isOpen) return;
-  unlocked = true;
-  Secret.open(null, Object.assign({ how }, from));
+function reveal(how, from){
+  if (Deck.isOpen) return;
+  opened = true;
+  Deck.open(null, Object.assign({ how }, from));
 }
 
-// 뒷문: '체육교사 B'를 다섯 번
 (() => {
   const sig = document.querySelector(".head .who b"); if (!sig) return;
   let n = 0, t = 0;
   sig.addEventListener("click", () => {
     clearTimeout(t); n++;
-    if (n >= 5){ n = 0; unlock("tap", { rect: sig.getBoundingClientRect() }); return; }
+    if (n >= 5){ n = 0; reveal("tap", { rect: sig.getBoundingClientRect() }); return; }
     t = setTimeout(() => { n = 0; }, 2500);
   });
 })();
 
-// ---------- 화면 어디든 B 쓰기 ----------
 (() => {
   if (!PUBLIC) return;
   const cv = document.createElement("canvas"); cv.id = "ink"; cv.setAttribute("aria-hidden", "true");
@@ -1411,10 +1402,10 @@ function unlock(how, from){
 
   let strokes = [], curS = null, start = null, drawing = false, idle = 0, fade = 0, eatClick = false, armedUntil = 0;
   const color = () => getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#0A7BD0";
-  const blocked = () => talk || Secret.isOpen || !$("#chat").hidden;
+  const blocked = () => talk || Deck.isOpen || !$("#chat").hidden;
 
   function clearInk(){ clearTimeout(fade); cv.style.transition = "none"; cv.style.opacity = "1"; ctx.clearRect(0, 0, innerWidth, innerHeight); }
-  let showInk = false; // 쓰는 동안은 선을 숨기고, 맞으면 그때 B를 보여 줌
+  let showInk = false;
   function line(a, b){
     if (!showInk) return;
     ctx.strokeStyle = color(); ctx.lineWidth = 5; ctx.lineCap = "round"; ctx.lineJoin = "round";
@@ -1432,16 +1423,14 @@ function unlock(how, from){
     if (drawing && curS.length) line(curS[curS.length - 1], p);
     curS.push(p);
   }
-  // 획 사이 기다림: 이미 B 모양이면 바로 열고, 아니면 다음 획을 넉넉히 기다린다
-  // (마우스·터치패드는 첫 획을 떼고 다시 위로 가져가는 데 1초 가까이 걸린다)
   const WAIT_MORE = 1600, WAIT_DONE = 250;
   function end(){
     if (drawing){
       strokes.push(curS); eatClick = true; setTimeout(() => { eatClick = false; }, 400); armedUntil = Date.now() + WAIT_MORE;
       clearTimeout(idle);
-      const already = BRecog.recognize(strokes).ok;
+      const already = Shape.recognize(strokes).ok;
       idle = setTimeout(judge, already ? WAIT_DONE : WAIT_MORE);
-    } else if (strokes.length){ clearTimeout(idle); idle = setTimeout(judge, WAIT_MORE); } // 그리다 만 클릭이면 다시 기다림
+    } else if (strokes.length){ clearTimeout(idle); idle = setTimeout(judge, WAIT_MORE); }
     drawing = false; curS = null; start = null;
     document.body.classList.remove("drawing");
   }
@@ -1450,24 +1439,23 @@ function unlock(how, from){
     fade = setTimeout(() => { ctx.clearRect(0, 0, innerWidth, innerHeight); cv.style.transition = "none"; cv.style.opacity = "1"; }, 650);
   }
   function judge(){
-    const done = strokes, r = BRecog.recognize(done);
+    const done = strokes, r = Shape.recognize(done);
     strokes = [];
     if (!r.ok){ clearInk(); return; }
     clearInk(); showInk = true;
     done.forEach(s => { for (let i = 1; i < s.length; i++) line(s[i-1], s[i]); });
     showInk = false;
-    window.__inkHandoff = () => { window.__inkHandoff = null; clearInk(); };
-    unlock("b", { strokes: done.map(s => s.map(q => ({ x: q.x, y: q.y }))), color: color() });
-    setTimeout(() => { if (window.__inkHandoff){ window.__inkHandoff = null; fadeOut(); } }, 1600);
+    window.__tr = () => { window.__tr = null; clearInk(); };
+    reveal("b", { strokes: done.map(s => s.map(q => ({ x: q.x, y: q.y }))), color: color() });
+    setTimeout(() => { if (window.__tr){ window.__tr = null; fadeOut(); } }, 1600);
   }
 
-  // 마우스·펜(포인터)
   document.addEventListener("pointerdown", e => {
     if (e.pointerType === "touch" || e.button !== 0 || blocked()) return;
     if (e.target.closest(".chat, .toast, button.cp")) return;
-    if (strokes.length) clearTimeout(idle); // 다음 획을 누르는 중에 판정하지 않게
+    if (strokes.length) clearTimeout(idle);
     start = { x: e.clientX, y: e.clientY }; curS = [ start ];
-    if (strokes.length && Date.now() < armedUntil) begin();  // B의 두 번째 획은 바로 이어 그리기
+    if (strokes.length && Date.now() < armedUntil) begin();
   }, true);
   document.addEventListener("pointermove", e => {
     if (e.pointerType === "touch" || !curS || !(e.buttons & 1)) return;
@@ -1477,7 +1465,6 @@ function unlock(how, from){
   document.addEventListener("pointerup", e => { if (e.pointerType !== "touch" && curS) end(); }, true);
   document.addEventListener("pointercancel", e => { if (e.pointerType !== "touch" && curS){ drawing = false; curS = null; document.body.classList.remove("drawing"); } }, true);
 
-  // 손가락: 꾹 0.25초 누른 다음 쓰기 (그냥 밀면 스크롤) · 애플펜슬은 바로
   let hold = 0, tStart = null;
   document.addEventListener("touchstart", e => {
     if (e.touches.length !== 1 || blocked()) { clearTimeout(hold); return; }
@@ -1485,7 +1472,7 @@ function unlock(how, from){
     if (strokes.length) clearTimeout(idle);
     const t = e.touches[0];
     tStart = { x: t.clientX, y: t.clientY }; curS = [ { ...tStart } ];
-    const fits = document.documentElement.scrollHeight <= innerHeight + 60; // 태블릿처럼 한 화면에 다 들어오면 꾹 누를 필요 없음
+    const fits = document.documentElement.scrollHeight <= innerHeight + 60;
     if (fits || t.touchType === "stylus" || (strokes.length && Date.now() < armedUntil)) { begin(); return; }
     clearTimeout(hold);
     hold = setTimeout(() => { if (curS){ begin(); if (navigator.vibrate) navigator.vibrate(12); } }, 250);
@@ -1494,24 +1481,17 @@ function unlock(how, from){
     if (!curS) return;
     const t = e.touches[0];
     if (drawing){ e.preventDefault(); add(t.clientX, t.clientY); return; }
-    if (Math.hypot(t.clientX - tStart.x, t.clientY - tStart.y) > 8){ clearTimeout(hold); curS = null; } // 스크롤로 보기
+    if (Math.hypot(t.clientX - tStart.x, t.clientY - tStart.y) > 8){ clearTimeout(hold); curS = null; }
   }, { passive: false, capture: true });
   document.addEventListener("touchend", () => { clearTimeout(hold); if (curS) end(); }, { capture: true });
   document.addEventListener("touchcancel", () => { clearTimeout(hold); curS = null; drawing = false; document.body.classList.remove("drawing"); }, { capture: true });
 
-  // 그리다 끝난 자리의 클릭(칸 열림)은 먹기
   document.addEventListener("click", e => { if (eatClick){ eatClick = false; e.preventDefault(); e.stopPropagation(); } }, true);
   document.addEventListener("dragstart", e => { if (!talk) e.preventDefault(); }, true);
   document.addEventListener("contextmenu", e => { if (drawing) e.preventDefault(); }, true);
 })();
 
 
-// ===== 시크릿 화면: 장면 대본 =====
-// 비트 종류
-//  say  : B 말풍선(설명)          hook/sub : B 말풍선(큰 손글씨) + 작은 설명
-//  type : 입력칸에 쓰기 [{n,tag,file,t}]  send : 보내기
-//  ai   : AI 답 {text} 또는 {html}       mark : 대화 속 요소에 빨간 펜 동그라미(+hook)
-//  fresh: 앞 대화 흐리게 + "그럼 이렇게 하십시오"   gap : 가운데 줄 글
 const SCENES = [
 {
   id: "notice", img: "img/b-notice.png",
@@ -1684,12 +1664,11 @@ const SCENES = [
 ];
 const COMMON = ["'해 줄 수 있어?' 말고 '해 줘'", "'안 되면 솔직하게 말해 줘'", "처음 온 선생님이 읽어도 알 만큼", "규칙만 말고 이유도 같이"];
 
-// ===== 시크릿 화면: 회전 무대 · 장면 재생 =====
-const Secret = (() => {
+const Deck = (() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const sheet = document.querySelector(".sheet");
   const root = document.createElement("section");
-  root.className = "secret"; root.hidden = true; root.setAttribute("aria-label", "AI와 대화하기 예시");
+  root.className = "deck"; root.hidden = true; root.setAttribute("aria-label", "AI와 대화하기 예시");
   sheet.after(root);
   document.body.classList.add("flip-stage");
   const N = SCENES.length, NUM = "①②③④⑤⑥";
@@ -1706,13 +1685,12 @@ const Secret = (() => {
   function hurry(){ fast = true; if (wake) wake(); }
   const pic = (sc, big) => sc.img ? `<img src="${sc.img}" alt="" draggable="false">` : `<span class="ph">B${big ? "<small>그림 준비 중</small>" : ""}</span>`;
 
-  // ---------- 열고 닫기 ----------
   async function open(sceneIdx, from){
     if (isOpen){ if (sceneIdx != null) play(sceneIdx); return; }
     isOpen = true;
     if (!reduce){ sheet.classList.add("flip-out"); await new Promise(r => setTimeout(r, 400)); }
     sheet.hidden = true; sheet.classList.remove("flip-out");
-    document.body.classList.add("sec-on");
+    document.body.classList.add("dk-on");
     root.hidden = false;
     if (sceneIdx != null) play(sceneIdx); else home(0, from);
     if (!reduce){ root.classList.add("flip-in"); setTimeout(() => root.classList.remove("flip-in"), 720); }
@@ -1722,7 +1700,7 @@ const Secret = (() => {
     run++; hurry(); stopRing();
     if (!reduce){ root.classList.add("flip-out"); await new Promise(r => setTimeout(r, 340)); }
     root.hidden = true; root.classList.remove("flip-out"); root.textContent = "";
-    document.body.classList.remove("sec-on");
+    document.body.classList.remove("dk-on");
     sheet.hidden = false;
     if (!reduce){ sheet.classList.add("flip-back"); setTimeout(() => sheet.classList.remove("flip-back"), 600); }
     isOpen = false;
@@ -1735,8 +1713,7 @@ const Secret = (() => {
     n.appendChild(r); root.appendChild(n);
   }
 
-  // ---------- 회전 무대 ----------
-  let R = null; // {items, pos, target, raf, info...}
+  let R = null;
   function stopRing(){ if (R && R.raf) cancelAnimationFrame(R.raf); R = null; }
   function home(start, from){
     run++; hurry(); stopRing();
@@ -1808,7 +1785,7 @@ const Secret = (() => {
   const lerp = (a, b, t) => a + (b - a) * t;
   function orbitSize(){
     const W = R.ring.clientWidth, iw = R.items[0].offsetWidth || 300;
-    if (W < 600){ const Rx = W * 0.4; return { Rx, Ry: Rx * 0.78, so: 0.36 }; } // 폰: 좁으니 궤도를 둥글게 세워서 겹치지 않게
+    if (W < 600){ const Rx = W * 0.4; return { Rx, Ry: Rx * 0.78, so: 0.36 }; }
     const Rx = Math.min(W * 0.38, 450);
     return { Rx, Ry: Rx * 0.4, so: Math.min(0.5, (Rx * 0.72) / iw) };
   }
@@ -1823,11 +1800,10 @@ const Secret = (() => {
       let s = 0.34 + 0.66 * Math.pow(f, 1.8);
       let op = Math.pow(Math.max(0, (f - 0.28) / 0.72), 1.5);
       if (o){
-        const sp = o.spread[i];
-        const ox = Math.sin(th) * O.Rx * sp, oy = z * O.Ry * sp;
-        const os = O.so * (0.72 + 0.28 * f) * (0.12 + 0.88 * Math.min(1, sp));
-        x = lerp(ox, x, k) + o.dx * o.g[i]; y = lerp(oy, y, k) + o.dy * o.g[i];
-        s = lerp(os, s, k); op = lerp(Math.min(1, sp * 1.6), op, k);
+        const v = o.vis[i], ox = Math.sin(th) * O.Rx, oy = z * O.Ry + (o.offY[i] || 0);
+        const os = O.so * (0.72 + 0.28 * f) * (0.55 + 0.45 * v);
+        x = lerp(ox, x, k); y = lerp(oy, y, k);
+        s = lerp(os, s, k); op = lerp(v, op, k);
       }
       el.style.transform = `translate(-50%,-50%) translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${s.toFixed(3)})`;
       el.style.opacity = op.toFixed(3);
@@ -1837,69 +1813,98 @@ const Secret = (() => {
       el.setAttribute("aria-hidden", Math.abs(d) < 0.5 ? "false" : "true");
     });
   }
-  // ---------- 여는 장면: 내가 쓴 B → 캐릭터들이 쏟아져 나와 궤도로 → 기울어져 회전 무대로 ----------
   function intro(from){
     const ring = R.ring, my = run;
     root.classList.add("intro");
     const rr = ring.getBoundingClientRect();
     const cx = rr.left + rr.width / 2, cy = rr.top + rr.height / 2;
-    const O = orbitSize();
-    // 가운데 놓일 B: 직접 쓴 획이 있으면 그 획 그대로, 없으면 주황 동그라미 B
-    const sun = h("div", "sun"); let sx = cx, sy = cy - rr.height * 0.25, sw = 60;
-    const target = Math.max(70, O.Ry * 1.25);
+    const O = orbitSize(), iw = R.items[0].offsetWidth || 300;
+    const sun = h("div", "sun"); let sx = cx, sy = cy - rr.height * 0.3, startS = 0.4;
     if (from.strokes && from.strokes.length){
       const all = from.strokes.flat();
       const x0 = Math.min(...all.map(p => p.x)), x1 = Math.max(...all.map(p => p.x));
       const y0 = Math.min(...all.map(p => p.y)), y1 = Math.max(...all.map(p => p.y));
       const bw = Math.max(20, x1 - x0), bh = Math.max(20, y1 - y0), pad = 8;
-      sx = (x0 + x1) / 2; sy = (y0 + y1) / 2; sw = Math.max(bw, bh);
+      sx = (x0 + x1) / 2; sy = (y0 + y1) / 2; startS = 1;
       const d = from.strokes.map(st => "M" + st.map(p => `${(p.x - x0 + pad).toFixed(1)} ${(p.y - y0 + pad).toFixed(1)}`).join("L")).join("");
       sun.innerHTML = `<svg viewBox="0 0 ${bw + pad * 2} ${bh + pad * 2}" aria-hidden="true"><path d="${d}" fill="none" stroke="${from.color || "#0A7BD0"}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`;
       sun.style.width = (bw + pad * 2) + "px"; sun.style.height = (bh + pad * 2) + "px";
     } else {
-      if (from.rect){ sx = from.rect.left + from.rect.width / 2; sy = from.rect.top + from.rect.height / 2; sw = from.rect.height || 22; }
-      sun.innerHTML = `<b>B</b>`; sun.style.width = sun.style.height = "120px"; 
+      sun.innerHTML = `<b>B</b>`; sun.style.width = sun.style.height = "120px";
+      if (from.rect){ sx = from.rect.left + from.rect.width / 2; sy = from.rect.top + from.rect.height / 2; startS = Math.max(0.2, (from.rect.height || 24) / 120); }
     }
-    const base = parseFloat(sun.style.width);
-    const startS = from.strokes ? 1 : (from.rect ? (from.rect.height || 22) / 120 : 0.3);
-    const endS = target / Math.max(base, parseFloat(sun.style.height));
-    const line = h("div", "orbit-line");
-    line.style.width = O.Rx * 2 + "px"; line.style.height = O.Ry * 2 + "px";
-    ring.append(line, sun);
-    if (window.__inkHandoff) window.__inkHandoff();
+    const bw = parseFloat(sun.style.width), bh = parseFloat(sun.style.height);
+    const endS = Math.max(70, O.Ry * 1.2) / Math.max(bw, bh);
+    const NS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(NS, "svg"); svg.setAttribute("class", "orbit-line");
+    svg.setAttribute("viewBox", `${-O.Rx - 4} ${-O.Ry - 4} ${O.Rx * 2 + 8} ${O.Ry * 2 + 8}`);
+    svg.style.width = (O.Rx * 2 + 8) + "px"; svg.style.height = (O.Ry * 2 + 8) + "px";
+    const path = document.createElementNS(NS, "path"); svg.appendChild(path);
+    const arc = frac => { let d = ""; const n = Math.max(1, Math.ceil(frac * 96)); for (let j = 0; j <= n; j++){ const ph = frac * 2 * Math.PI * j / n; d += (j ? "L" : "M") + (Math.sin(ph) * O.Rx).toFixed(1) + " " + (Math.cos(ph) * O.Ry).toFixed(1); } return frac > 0 ? d : ""; };
+    const PW = Math.max(90, Math.min(170, O.Rx * 0.4));
+    const pusher = h("div", "pusher", `<img src="img/b-push1.png" alt="" draggable="false"><img src="img/b-push2.png" alt="" draggable="false">`);
+    pusher.style.width = pusher.style.height = PW + "px";
+    ring.append(svg, sun, pusher);
+    if (window.__tr) window.__tr();
 
-    const dx0 = sx - cx, dy0 = sy - cy;
-    const D = 3600; let t0 = performance.now(), skip = false;
+    const bx0 = sx - cx, by0 = sy - cy;
+    const dir = bx0 > 8 ? -1 : 1;
+    if (dir < 0) pusher.classList.add("mirror");
+    const dist = Math.hypot(bx0, by0), hwAvg = bw * (startS + endS) / 4;
+    const spin = dir * 360 * Math.max(1, Math.round(dist / (2 * Math.PI * Math.max(20, hwAvg))));
+    const slotS = O.so * iw / PW;
+    const T = { in: 450, push: 1350, hop0: 1400, hop1: 1820, drop0: 1850, gap: 150, dropD: 280 };
+    T.close0 = T.drop0 + (N - 2) * T.gap + T.dropD; T.close1 = T.close0 + 200; T.spin0 = T.close1; T.end = T.spin0 + 1700;
+    let t0 = performance.now(), skip = false;
     const cl = x => Math.max(0, Math.min(1, x));
     const eOut = x => 1 - Math.pow(1 - x, 3);
     const eIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-    const eBack = x => { const c = 1.4; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+    const eBack = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
     const finish = () => { skip = true; };
     root.addEventListener("pointerdown", finish, { once: true });
     addEventListener("keydown", finish, { once: true });
     let shownText = false;
+    const vis = Array(N).fill(0), offY = Array(N).fill(0);
     const frame = now => {
       if (!R || my !== run) return;
-      const t = skip ? 1 : cl((now - t0) / D);
-      // 회전: 한 바퀴 반을 빠르게 돌다가 제자리(0번)에 천천히 멈춤
-      R.pos = -N * 1.5 * (1 - eOut(t));
-      const spread = [], g = [];
-      for (let i = 0; i < N; i++){
-        const ti = cl((t - 0.04 - i * 0.012) / 0.3);
-        spread.push(ti <= 0 ? 0 : eBack(ti)); g.push(1 - eOut(ti));
-      }
-      const k = eIO(cl((t - 0.6) / 0.36));
-      layout({ k, spread, g, dx: dx0, dy: dy0 });
-      // 가운데 B: 쓴 자리에서 궤도 한가운데로 → 기울기 시작하면 사라짐
-      const m = eIO(cl(t / 0.26)), sc = lerp(startS, endS, m);
-      sun.style.transform = `translate(-50%,-50%) translate(${lerp(dx0, 0, m).toFixed(1)}px,${lerp(dy0, 0, m).toFixed(1)}px) scale(${sc.toFixed(3)})`;
-      sun.style.opacity = (1 - cl((t - 0.56) / 0.2)).toFixed(3);
-      line.style.transform = `translate(-50%,-50%) scale(${(0.2 + 0.8 * eOut(cl((t - 0.08) / 0.3))).toFixed(3)})`;
-      line.style.opacity = (cl((t - 0.1) / 0.15) * (1 - cl((t - 0.58) / 0.16))).toFixed(3);
-      if (!shownText && t > 0.86){ shownText = true; root.classList.add("intro-out"); R.shown = -1; showInfo(); }
-      if (t < 1) requestAnimationFrame(frame);
+      const ms = skip ? T.end : now - t0;
+      const m = eIO(cl((ms - T.in) / (T.push - T.in)));
+      const bx = lerp(bx0, 0, m), by = lerp(by0, 0, m), bs = lerp(startS, endS, m);
+      sun.style.transform = `translate(-50%,-50%) translate(${bx.toFixed(1)}px,${by.toFixed(1)}px) rotate(${(spin * m).toFixed(1)}deg) scale(${bs.toFixed(3)})`;
+      const hw = bw * bs / 2, hh = bh * bs / 2;
+      const px = bx - dir * (hw + PW * 0.42), py = by + hh - PW / 2;
+      let qx, qy, qs = 1, qo = 1;
+      if (ms < T.in){ const w = eOut(cl(ms / T.in)); qx = lerp(px - dir * rr.width * 0.75, px, w); qy = py; }
+      else if (ms < T.hop0){ qx = px; qy = py; }
       else {
-        sun.remove(); line.remove();
+        const j = eIO(cl((ms - T.hop0) / (T.hop1 - T.hop0)));
+        const sx1 = -dir * (endS * bw / 2 + PW * 0.42), sy1 = endS * bh / 2 - PW / 2;
+        qx = lerp(sx1, 0, j); qy = lerp(sy1, O.Ry, j) - Math.sin(j * Math.PI) * O.Ry * 0.9; qs = lerp(1, slotS, j);
+        qo = 1 - cl((ms - (T.hop1 - 120)) / 150);
+      }
+      const walk = ms < T.push && Math.floor(ms / 150) % 2;
+      pusher.dataset.f = walk ? "2" : "1";
+      pusher.style.transform = `translate(-50%,-50%) translate(${qx.toFixed(1)}px,${qy.toFixed(1)}px) scale(${qs.toFixed(3)})`;
+      pusher.style.opacity = qo.toFixed(3);
+      vis[0] = cl((ms - (T.hop1 - 120)) / 150);
+      let lp = 0;
+      for (let i = 1; i < N; i++){
+        const li = cl((ms - (T.drop0 + (i - 1) * T.gap)) / T.dropD);
+        vis[i] = cl(li * 3); offY[i] = li <= 0 ? -O.Ry * 2 : -(1 - eBack(li)) * (O.Ry * 1.4 + 60);
+        lp += eOut(li);
+      }
+      lp = (lp + eOut(cl((ms - T.close0) / (T.close1 - T.close0)))) / N;
+      path.setAttribute("d", arc(Math.min(1, lp)));
+      const sp = cl((ms - T.spin0) / (T.end - T.spin0));
+      R.pos = N * eIO(sp);
+      const k = eIO(cl((sp - 0.45) / 0.55));
+      layout({ k, vis, offY });
+      const fade = 1 - cl((sp - 0.35) / 0.3);
+      sun.style.opacity = fade.toFixed(3); svg.style.opacity = fade.toFixed(3);
+      if (!shownText && sp > 0.8){ shownText = true; root.classList.add("intro-out"); R.shown = -1; showInfo(); }
+      if (ms < T.end) requestAnimationFrame(frame);
+      else {
+        sun.remove(); svg.remove(); pusher.remove();
         root.classList.remove("intro", "intro-out");
         removeEventListener("keydown", finish);
         R.pos = R.target = 0; layout(); showInfo();
@@ -1940,7 +1945,6 @@ const Secret = (() => {
     addEventListener("resize", () => { if (R) layout(); });
   }
 
-  // ---------- 장면 ----------
   let S = null;
   function play(i){
     const sc = SCENES[i]; const my = ++run; hurry(); stopRing(); cur = i;
@@ -2102,7 +2106,7 @@ const Secret = (() => {
   return { open, close, get isOpen(){ return isOpen; } };
 })();
 
-if (PUBLIC && /^#b[1-7]?$/.test(location.hash)){ const n = +location.hash.slice(2); unlocked = true; render(); Secret.open(n ? n - 1 : null); }
+if (PUBLIC && /^#b[1-7]?$/.test(location.hash)){ const n = +location.hash.slice(2); opened = true; render(); Deck.open(n ? n - 1 : null); }
 </script>
 
 
