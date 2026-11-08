@@ -185,7 +185,6 @@ body.dk-on{background:#FFFFFF;color-scheme:light}
 .deck .orbit-line path{fill:none;stroke:#F08C00;stroke-opacity:.6;stroke-width:2;stroke-dasharray:7 7;stroke-linecap:round}
 .deck .pusher{position:absolute;left:50%;top:50%;z-index:260;pointer-events:none;will-change:transform,opacity}
 .deck .pusher img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
-.deck .pusher[data-f="1"] img:last-child,.deck .pusher[data-f="2"] img:first-child{visibility:hidden}
 .deck .pusher.mirror img{transform:scaleX(-1)}
 .deck.intro .k-hero,.deck.intro .k-info,.deck.intro .k-common,.deck.intro .k-note,.deck.intro .arrow,.deck.intro .floor{opacity:0;transition:opacity .5s ease}
 .deck.intro.intro-out .k-hero,.deck.intro.intro-out .k-info,.deck.intro.intro-out .k-common,.deck.intro.intro-out .k-note,.deck.intro.intro-out .arrow,.deck.intro.intro-out .floor{opacity:1}
@@ -1842,7 +1841,8 @@ const Deck = (() => {
     const path = document.createElementNS(NS, "path"); svg.appendChild(path);
     const arc = frac => { let d = ""; const n = Math.max(1, Math.ceil(frac * 96)); for (let j = 0; j <= n; j++){ const ph = frac * 2 * Math.PI * j / n; d += (j ? "L" : "M") + (Math.sin(ph) * O.Rx).toFixed(1) + " " + (Math.cos(ph) * O.Ry).toFixed(1); } return frac > 0 ? d : ""; };
     const PW = Math.max(90, Math.min(170, O.Rx * 0.4));
-    const pusher = h("div", "pusher", `<img src="img/b-push1.png" alt="" draggable="false"><img src="img/b-push2.png" alt="" draggable="false">`);
+    const PF = 5, pusher = h("div", "pusher", Array.from({ length: PF }, (_, j) => `<img src="img/b-push${j + 1}.png" alt="" draggable="false">`).join(""));
+    const pimgs = [...pusher.children];
     pusher.style.width = pusher.style.height = PW + "px";
     ring.append(svg, sun, pusher);
     if (window.__tr) window.__tr();
@@ -1872,18 +1872,18 @@ const Deck = (() => {
       const bx = lerp(bx0, 0, m), by = lerp(by0, 0, m), bs = lerp(startS, endS, m);
       sun.style.transform = `translate(-50%,-50%) translate(${bx.toFixed(1)}px,${by.toFixed(1)}px) rotate(${(spin * m).toFixed(1)}deg) scale(${bs.toFixed(3)})`;
       const hw = bw * bs / 2, hh = bh * bs / 2;
-      const px = bx - dir * (hw + PW * 0.42), py = by + hh - PW / 2;
+      const px = bx - dir * (hw + PW * 0.5), py = by + hh - PW / 2;
       let qx, qy, qs = 1, qo = 1;
       if (ms < T.in){ const w = eOut(cl(ms / T.in)); qx = lerp(px - dir * rr.width * 0.75, px, w); qy = py; }
       else if (ms < T.hop0){ qx = px; qy = py; }
       else {
         const j = eIO(cl((ms - T.hop0) / (T.hop1 - T.hop0)));
-        const sx1 = -dir * (endS * bw / 2 + PW * 0.42), sy1 = endS * bh / 2 - PW / 2;
+        const sx1 = -dir * (endS * bw / 2 + PW * 0.5), sy1 = endS * bh / 2 - PW / 2;
         qx = lerp(sx1, 0, j); qy = lerp(sy1, O.Ry, j) - Math.sin(j * Math.PI) * O.Ry * 0.9; qs = lerp(1, slotS, j);
         qo = 1 - cl((ms - (T.hop1 - 120)) / 150);
       }
-      const walk = ms < T.push && Math.floor(ms / 150) % 2;
-      pusher.dataset.f = walk ? "2" : "1";
+      const fi = ms < T.push ? Math.floor(ms / 110) % PF : 0;
+      pimgs.forEach((im, j) => { im.style.visibility = j === fi ? "visible" : "hidden"; });
       pusher.style.transform = `translate(-50%,-50%) translate(${qx.toFixed(1)}px,${qy.toFixed(1)}px) scale(${qs.toFixed(3)})`;
       pusher.style.opacity = qo.toFixed(3);
       vis[0] = cl((ms - (T.hop1 - 120)) / 150);
