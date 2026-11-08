@@ -178,6 +178,15 @@ body.sec-on{background:#FFFFFF;color-scheme:light}
 @keyframes pgout{to{transform:rotateY(90deg);opacity:.5}}
 @keyframes pgin{from{transform:rotateY(-90deg);opacity:.5}to{transform:none;opacity:1}}
 
+/* 여는 장면: 궤도 */
+.secret .sun{position:absolute;left:50%;top:50%;z-index:100;display:grid;place-items:center;pointer-events:none;will-change:transform,opacity}
+.secret .sun svg{width:100%;height:100%;overflow:visible}
+.secret .sun b{display:grid;place-items:center;width:100%;height:100%;border:9px solid #F08C00;border-radius:50%;font-size:64px;font-weight:800;color:var(--k-ink)}
+.secret .orbit-line{position:absolute;left:50%;top:50%;z-index:1;border:2px dashed rgba(240,140,0,.55);border-radius:50%;pointer-events:none;opacity:0}
+.secret.intro .k-hero,.secret.intro .k-info,.secret.intro .k-common,.secret.intro .k-note,.secret.intro .arrow,.secret.intro .floor{opacity:0;transition:opacity .5s ease}
+.secret.intro.intro-out .k-hero,.secret.intro.intro-out .k-info,.secret.intro.intro-out .k-common,.secret.intro.intro-out .k-note,.secret.intro.intro-out .arrow,.secret.intro.intro-out .floor{opacity:1}
+.secret.intro .ring{cursor:default}
+
 /* 위 막대 */
 .secret .k-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 0 10px;border-bottom:1px solid var(--k-line);font-size:14px}
 .secret .k-nav .me{font-weight:700;letter-spacing:-.01em}
@@ -1370,10 +1379,10 @@ function toast(msg){
 }
 
 // ---------- 열기 ----------
-function unlock(how){
+function unlock(how, from){
   if (Secret.isOpen) return;
   unlocked = true;
-  Secret.open();
+  Secret.open(null, { how, from });
 }
 
 // 뒷문: '체육교사 B'를 다섯 번
@@ -1382,7 +1391,7 @@ function unlock(how){
   let n = 0, t = 0;
   sig.addEventListener("click", () => {
     clearTimeout(t); n++;
-    if (n >= 5){ n = 0; unlock("tap"); return; }
+    if (n >= 5){ n = 0; unlock("tap", { rect: sig.getBoundingClientRect() }); return; }
     t = setTimeout(() => { n = 0; }, 2500);
   });
 })();
@@ -1447,8 +1456,9 @@ function unlock(how){
     clearInk(); showInk = true;
     done.forEach(s => { for (let i = 1; i < s.length; i++) line(s[i-1], s[i]); });
     showInk = false;
-    unlock("b");
-    setTimeout(fadeOut, 700);
+    window.__inkHandoff = () => { window.__inkHandoff = null; clearInk(); };
+    unlock("b", { strokes: done.map(s => s.map(q => ({ x: q.x, y: q.y }))), color: color() });
+    setTimeout(() => { if (window.__inkHandoff){ window.__inkHandoff = null; fadeOut(); } }, 1600);
   }
 
   // 마우스·펜(포인터)
@@ -1697,14 +1707,14 @@ const Secret = (() => {
   const pic = (sc, big) => sc.img ? `<img src="${sc.img}" alt="" draggable="false">` : `<span class="ph">B${big ? "<small>그림 준비 중</small>" : ""}</span>`;
 
   // ---------- 열고 닫기 ----------
-  async function open(sceneIdx){
+  async function open(sceneIdx, from){
     if (isOpen){ if (sceneIdx != null) play(sceneIdx); return; }
     isOpen = true;
     if (!reduce){ sheet.classList.add("flip-out"); await new Promise(r => setTimeout(r, 400)); }
     sheet.hidden = true; sheet.classList.remove("flip-out");
     document.body.classList.add("sec-on");
     root.hidden = false;
-    if (sceneIdx != null) play(sceneIdx); else home(0);
+    if (sceneIdx != null) play(sceneIdx); else home(0, from);
     if (!reduce){ root.classList.add("flip-in"); setTimeout(() => root.classList.remove("flip-in"), 720); }
     window.scrollTo(0, 0);
   }
@@ -1728,7 +1738,7 @@ const Secret = (() => {
   // ---------- 회전 무대 ----------
   let R = null; // {items, pos, target, raf, info...}
   function stopRing(){ if (R && R.raf) cancelAnimationFrame(R.raf); R = null; }
-  function home(start){
+  function home(start, from){
     run++; hurry(); stopRing();
     root.textContent = "";
     nav("업무분장표로 돌아가기", close);
@@ -1761,7 +1771,7 @@ const Secret = (() => {
     root.appendChild(h("p", "k-note", "다들 처음 하는 말과, 이렇게 바꾸면 달라지는 말을 보여 드립니다. 실제 대화를 줄여서 옮겼어요."));
 
     R = { ring, items, q, meths, dots, pos: start || 0, target: start || 0, raf: 0, shown: -1, moved: false };
-    layout(); showInfo();
+    if (from && !reduce) intro(from); else { layout(); showInfo(); }
     bindDrag(ring);
     ring.addEventListener("keydown", e => {
       if (e.key === "ArrowRight"){ e.preventDefault(); step(1); }
@@ -1795,21 +1805,107 @@ const Secret = (() => {
     };
     R.raf = requestAnimationFrame(tick);
   }
-  function layout(){
+  const lerp = (a, b, t) => a + (b - a) * t;
+  function orbitSize(){
+    const W = R.ring.clientWidth, iw = R.items[0].offsetWidth || 300;
+    if (W < 600){ const Rx = W * 0.4; return { Rx, Ry: Rx * 0.78, so: 0.36 }; } // 폰: 좁으니 궤도를 둥글게 세워서 겹치지 않게
+    const Rx = Math.min(W * 0.38, 450);
+    return { Rx, Ry: Rx * 0.4, so: Math.min(0.5, (Rx * 0.72) / iw) };
+  }
+  function layout(o){
     const W = R.ring.clientWidth, iw = R.items[0].offsetWidth || 300;
     const rx = W < 600 ? W * 0.72 : Math.min(W * 0.4, iw * 1.18);
+    const k = o ? o.k : 1, O = o && orbitSize();
     R.items.forEach((el, i) => {
       let d = i - R.pos; d = ((d % N) + N) % N; if (d > N / 2) d -= N;
       const th = d * 2 * Math.PI / N, z = Math.cos(th), f = (z + 1) / 2;
-      const x = Math.sin(th) * rx, y = -(1 - f) * 34;
-      const s = 0.34 + 0.66 * Math.pow(f, 1.8);
+      let x = Math.sin(th) * rx, y = -(1 - f) * 34;
+      let s = 0.34 + 0.66 * Math.pow(f, 1.8);
+      let op = Math.pow(Math.max(0, (f - 0.28) / 0.72), 1.5);
+      if (o){
+        const sp = o.spread[i];
+        const ox = Math.sin(th) * O.Rx * sp, oy = z * O.Ry * sp;
+        const os = O.so * (0.72 + 0.28 * f) * (0.12 + 0.88 * Math.min(1, sp));
+        x = lerp(ox, x, k) + o.dx * o.g[i]; y = lerp(oy, y, k) + o.dy * o.g[i];
+        s = lerp(os, s, k); op = lerp(Math.min(1, sp * 1.6), op, k);
+      }
       el.style.transform = `translate(-50%,-50%) translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${s.toFixed(3)})`;
-      el.style.opacity = Math.pow(Math.max(0, (f - 0.28) / 0.72), 1.5).toFixed(3);
-      el.style.filter = f > 0.97 ? "none" : `blur(${((1 - f) * 2.2).toFixed(2)}px) grayscale(${((1 - f) * 0.6).toFixed(2)})`;
+      el.style.opacity = op.toFixed(3);
+      el.style.filter = f > 0.97 || k < 0.05 ? "none" : `blur(${((1 - f) * 2.2 * k).toFixed(2)}px) grayscale(${((1 - f) * 0.6 * k).toFixed(2)})`;
       el.style.zIndex = String(100 + Math.round(z * 100));
       el.tabIndex = Math.abs(d) < 0.5 ? 0 : -1;
       el.setAttribute("aria-hidden", Math.abs(d) < 0.5 ? "false" : "true");
     });
+  }
+  // ---------- 여는 장면: 내가 쓴 B → 캐릭터들이 쏟아져 나와 궤도로 → 기울어져 회전 무대로 ----------
+  function intro(from){
+    const ring = R.ring, my = run;
+    root.classList.add("intro");
+    const rr = ring.getBoundingClientRect();
+    const cx = rr.left + rr.width / 2, cy = rr.top + rr.height / 2;
+    const O = orbitSize();
+    // 가운데 놓일 B: 직접 쓴 획이 있으면 그 획 그대로, 없으면 주황 동그라미 B
+    const sun = h("div", "sun"); let sx = cx, sy = cy - rr.height * 0.25, sw = 60;
+    const target = Math.max(70, O.Ry * 1.25);
+    if (from.strokes && from.strokes.length){
+      const all = from.strokes.flat();
+      const x0 = Math.min(...all.map(p => p.x)), x1 = Math.max(...all.map(p => p.x));
+      const y0 = Math.min(...all.map(p => p.y)), y1 = Math.max(...all.map(p => p.y));
+      const bw = Math.max(20, x1 - x0), bh = Math.max(20, y1 - y0), pad = 8;
+      sx = (x0 + x1) / 2; sy = (y0 + y1) / 2; sw = Math.max(bw, bh);
+      const d = from.strokes.map(st => "M" + st.map(p => `${(p.x - x0 + pad).toFixed(1)} ${(p.y - y0 + pad).toFixed(1)}`).join("L")).join("");
+      sun.innerHTML = `<svg viewBox="0 0 ${bw + pad * 2} ${bh + pad * 2}" aria-hidden="true"><path d="${d}" fill="none" stroke="${from.color || "#0A7BD0"}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`;
+      sun.style.width = (bw + pad * 2) + "px"; sun.style.height = (bh + pad * 2) + "px";
+    } else {
+      if (from.rect){ sx = from.rect.left + from.rect.width / 2; sy = from.rect.top + from.rect.height / 2; sw = from.rect.height || 22; }
+      sun.innerHTML = `<b>B</b>`; sun.style.width = sun.style.height = "120px"; 
+    }
+    const base = parseFloat(sun.style.width);
+    const startS = from.strokes ? 1 : (from.rect ? (from.rect.height || 22) / 120 : 0.3);
+    const endS = target / Math.max(base, parseFloat(sun.style.height));
+    const line = h("div", "orbit-line");
+    line.style.width = O.Rx * 2 + "px"; line.style.height = O.Ry * 2 + "px";
+    ring.append(line, sun);
+    if (window.__inkHandoff) window.__inkHandoff();
+
+    const dx0 = sx - cx, dy0 = sy - cy;
+    const D = 3600; let t0 = performance.now(), skip = false;
+    const cl = x => Math.max(0, Math.min(1, x));
+    const eOut = x => 1 - Math.pow(1 - x, 3);
+    const eIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    const eBack = x => { const c = 1.4; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+    const finish = () => { skip = true; };
+    root.addEventListener("pointerdown", finish, { once: true });
+    addEventListener("keydown", finish, { once: true });
+    let shownText = false;
+    const frame = now => {
+      if (!R || my !== run) return;
+      const t = skip ? 1 : cl((now - t0) / D);
+      // 회전: 한 바퀴 반을 빠르게 돌다가 제자리(0번)에 천천히 멈춤
+      R.pos = -N * 1.5 * (1 - eOut(t));
+      const spread = [], g = [];
+      for (let i = 0; i < N; i++){
+        const ti = cl((t - 0.04 - i * 0.012) / 0.3);
+        spread.push(ti <= 0 ? 0 : eBack(ti)); g.push(1 - eOut(ti));
+      }
+      const k = eIO(cl((t - 0.6) / 0.36));
+      layout({ k, spread, g, dx: dx0, dy: dy0 });
+      // 가운데 B: 쓴 자리에서 궤도 한가운데로 → 기울기 시작하면 사라짐
+      const m = eIO(cl(t / 0.26)), sc = lerp(startS, endS, m);
+      sun.style.transform = `translate(-50%,-50%) translate(${lerp(dx0, 0, m).toFixed(1)}px,${lerp(dy0, 0, m).toFixed(1)}px) scale(${sc.toFixed(3)})`;
+      sun.style.opacity = (1 - cl((t - 0.56) / 0.2)).toFixed(3);
+      line.style.transform = `translate(-50%,-50%) scale(${(0.2 + 0.8 * eOut(cl((t - 0.08) / 0.3))).toFixed(3)})`;
+      line.style.opacity = (cl((t - 0.1) / 0.15) * (1 - cl((t - 0.58) / 0.16))).toFixed(3);
+      if (!shownText && t > 0.86){ shownText = true; root.classList.add("intro-out"); R.shown = -1; showInfo(); }
+      if (t < 1) requestAnimationFrame(frame);
+      else {
+        sun.remove(); line.remove();
+        root.classList.remove("intro", "intro-out");
+        removeEventListener("keydown", finish);
+        R.pos = R.target = 0; layout(); showInfo();
+      }
+    };
+    frame(t0);
   }
   function showInfo(){
     const i = idx(); if (i === R.shown) return; R.shown = i; cur = i;
