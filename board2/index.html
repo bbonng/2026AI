@@ -233,6 +233,7 @@ body.dk-on{background:#FFFFFF;color-scheme:light}
 .deck .k-common{margin:clamp(36px,6vw,64px) auto 0;padding:22px 0 8px;border-top:1px solid var(--k-line);display:grid;grid-template-columns:repeat(4,1fr);gap:18px;text-align:left}
 .deck .k-common div{font-size:15px;line-height:1.5;color:var(--k-sub)}
 .deck .k-common b{display:block;color:var(--k-ink);font-size:17px;margin-bottom:4px;letter-spacing:-.01em}
+.deck .k-common .k-premise{grid-column:1/-1;margin:0 0 10px;text-align:center;font-size:clamp(20px,2.4vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1.35;color:var(--k-ink)}
 .deck .k-note{margin:18px 0 0;font-size:12px;color:var(--k-faint);text-align:center}
 .deck .k-note + .k-note{margin-top:4px}
 
@@ -1742,6 +1743,7 @@ const Deck = (() => {
     info.append(q, meths, cta, dots);
     root.appendChild(info);
     const com = h("div", "k-common");
+    com.appendChild(h("p", "k-premise", "AI도 틀립니다. 다 믿지 마십시오.<br>이상하면 다시 물으십시오."));
     [["해 줘", "'해 줄 수 있어?'라고 물으면 방법만 설명합니다."], ["안 되면 솔직하게", "AI는 기본적으로 '됩니다'라고 합니다."], ["처음 온 선생님처럼", "그분이 읽고 일할 수 있게 쓰면 AI도 압니다."], ["이유도 같이", "규칙보다 이유를 주면 더 넓게 알아듣습니다."]]
       .forEach(([t, d]) => com.appendChild(h("div", null, `<b>${esc(t)}</b>${esc(d)}`)));
     root.appendChild(com);
