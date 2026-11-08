@@ -183,6 +183,7 @@ body.dk-on{background:#FFFFFF;color-scheme:light}
 .deck .sun b{display:grid;place-items:center;width:100%;height:100%;border:9px solid #F08C00;border-radius:50%;font-size:64px;font-weight:800;color:var(--k-ink)}
 .deck .orbit-line{position:absolute;left:50%;top:50%;z-index:1;transform:translate(-50%,-50%);overflow:visible;pointer-events:none}
 .deck .orbit-line path{vector-effect:non-scaling-stroke;fill:none;stroke:#F08C00;stroke-opacity:.6;stroke-width:2;stroke-dasharray:7 7;stroke-linecap:round}
+.deck .bshadow{position:absolute;left:50%;top:50%;z-index:99;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.18),rgba(0,0,0,0));pointer-events:none;opacity:0}
 .deck .pusher{position:absolute;left:50%;top:50%;z-index:260;pointer-events:none;mix-blend-mode:multiply}
 .deck .pusher img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .deck .pusher.mirror img{transform:scaleX(-1)}
@@ -1847,18 +1848,22 @@ const Deck = (() => {
     badge.style.opacity = "0";
     const fl = ring.querySelector(".floor").getBoundingClientRect();
     const fy = fl.top + fl.height / 2 - cy, fsx = fl.width / (O.Rx * 2 + 8), fsy = fl.height / (O.Ry * 2 + 8);
-    const dir = bx0 > 8 ? -1 : 1;
+    const side = bx0 > 8 ? 1 : -1, dir = -side;
     if (dir < 0) pusher.classList.add("mirror");
-    const dist = Math.hypot(bx0, by0), hwAvg = 60 * (startS + endS) / 2;
-    const spin = dir * 360 * Math.max(1, Math.round(dist / (2 * Math.PI * Math.max(20, hwAvg))));
+    const rs = Math.min(endS, (rr.width < 600 ? 76 : 96) / 120), r = 60 * rs, rE = 60 * endS;
+    const lx = side * Math.min(rr.width / 2 - r - 10, Math.max(Math.abs(bx0), rr.width * 0.3));
+    const H1 = by0 > 0 ? by0 * 0.6 + 40 : 30, H2 = r * 0.45 + 10, H3 = r * 0.15 + 3;
+    const endA = (0 - bx0) / r, tgtA = 2 * Math.PI * Math.round(endA / (2 * Math.PI));
+    const shadow = h("div", "bshadow"); ring.appendChild(shadow);
     const slotS = O.so * iw / PW;
-    const T = { in: 450, push: 1350, hop0: 1400, hop1: 1820, drop0: 1850, gap: 150, dropD: 280 };
+    const T = { fall0: 160, fall1: 760, in0: 420, in1: 900, push0: 900, push1: 1750, hop0: 1760, hop1: 2180, drop0: 2210, gap: 135, dropD: 280 };
     T.close0 = T.drop0 + (N - 2) * T.gap + T.dropD; T.close1 = T.close0 + 200; T.spin0 = T.close1; T.end = T.spin0 + 1700;
     let t0 = performance.now(), skip = false;
     const cl = x => Math.max(0, Math.min(1, x));
     const eOut = x => 1 - Math.pow(1 - x, 3);
     const eIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
     const eBack = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+    const eSoft = x => { const c = 0.9, g = x * x * (3 - 2 * x); return 1 + (c + 1) * Math.pow(g - 1, 3) + c * Math.pow(g - 1, 2); };
     const finish = () => { skip = true; };
     root.addEventListener("pointerdown", finish, { once: true });
     addEventListener("keydown", finish, { once: true });
@@ -1867,27 +1872,40 @@ const Deck = (() => {
     const frame = now => {
       if (!R || my !== run) return;
       const ms = skip ? T.end : now - t0;
-      const m = eIO(cl((ms - T.in) / (T.push - T.in)));
-      const pop = eBack(cl(ms / 260));
-      const bx = lerp(bx0, 0, m), by = lerp(by0, 0, m), bs = lerp(startS, endS, m);
+      const pop = eBack(cl(ms / 220));
+      const u = cl((ms - T.fall0) / (T.fall1 - T.fall0)), w = cl((ms - T.push0) / (T.push1 - T.push0));
+      let bx, by;
+      if (ms < T.push0){
+        bx = lerp(bx0, lx, eOut(u));
+        if (u < 0.55){ const v = u / 0.55; by = lerp(by0, 0, v * v) - H1 * 4 * v * (1 - v) * (1 - v); }
+        else if (u < 0.8){ const v = (u - 0.55) / 0.25; by = -H2 * 4 * v * (1 - v); }
+        else { const v = (u - 0.8) / 0.2; by = -H3 * 4 * v * (1 - v); }
+      } else { bx = lerp(lx, 0, eSoft(w)); by = 0; }
+      const imp = [[0.55, 1], [0.8, 0.6], [1, 0.3]].reduce((a, [ui, wt]) => a + wt * Math.exp(-Math.pow((u - ui) / 0.035, 2)), 0);
+      const sq = ms > T.fall0 && ms < T.push0 ? 0.16 * imp : 0;
+      const grow = eIO(cl((ms - T.hop0) / 300)), rc = lerp(r, rE, grow);
       const spF = cl((ms - T.spin0) / (T.end - T.spin0)), fly = eIO(cl((spF - 0.3) / 0.5));
+      const ang = (bx - bx0) / r + (tgtA - endA) * eIO(w);
       const ux = lerp(bx, gx, fly), uy = lerp(by, gy, fly) - Math.sin(fly * Math.PI) * O.Ry * 0.6;
-      const us = lerp(bs, gS, fly) * (0.55 + 0.45 * pop);
-      sun.style.transform = `translate(-50%,-50%) translate(${ux.toFixed(1)}px,${uy.toFixed(1)}px) rotate(${(spin * m - dir * 360 * fly).toFixed(1)}deg) scale(${us.toFixed(3)})`;
+      const bs0 = ms < T.fall0 ? lerp(startS, rs, cl(ms / T.fall0)) : rs;
+      const us = lerp(lerp(bs0, endS, grow), gS, fly) * (0.55 + 0.45 * pop);
+      sun.style.transform = `translate(-50%,-50%) translate(${ux.toFixed(1)}px,${(uy + sq * rc).toFixed(1)}px) scale(${(1 + sq).toFixed(3)},${(1 - sq).toFixed(3)}) rotate(${(ang * 180 / Math.PI - dir * 360 * fly).toFixed(1)}deg) scale(${us.toFixed(3)})`;
       sun.style.opacity = cl(ms / 120).toFixed(3);
       if (fly >= 1 && badge.style.opacity === "0"){ badge.style.opacity = ""; sun.style.visibility = "hidden"; }
-      const hw = bw * bs / 2, hh = bh * bs / 2;
-      const px = bx - dir * (hw + PW * 0.5), py = by + hh - PW / 2;
-      let qx, qy, qs = 1, qo = 1;
-      if (ms < T.in){ const w = eOut(cl(ms / T.in)); qx = lerp(px - dir * rr.width * 0.75, px, w); qy = py; }
-      else if (ms < T.hop0){ qx = px; qy = py; }
+      const air = Math.min(1, Math.max(0, -by) / (2 * r));
+      shadow.style.width = (rc * 1.5) + "px"; shadow.style.height = (rc * 0.3) + "px";
+      shadow.style.transform = `translate(-50%,-50%) translate(${bx.toFixed(1)}px,${(rc + 2).toFixed(1)}px) scale(${(1 - 0.5 * air).toFixed(3)})`;
+      shadow.style.opacity = (cl((ms - T.fall0) / 200) * (1 - 0.7 * air) * (1 - cl(fly * 3))).toFixed(3);
+      const pxAt = x => x - dir * (r + PW * 0.5), py = r - PW / 2;
+      let qx, qy = py, qs = 1, qo = 1;
+      if (ms < T.in1){ const e = eOut(cl((ms - T.in0) / (T.in1 - T.in0))); qx = lerp(pxAt(lx) - dir * rr.width * 0.8, pxAt(lx), e); }
+      else if (ms < T.hop0){ qx = pxAt(bx); }
       else {
         const j = eIO(cl((ms - T.hop0) / (T.hop1 - T.hop0)));
-        const sx1 = -dir * (endS * bw / 2 + PW * 0.5), sy1 = endS * bh / 2 - PW / 2;
-        qx = lerp(sx1, 0, j); qy = lerp(sy1, O.Ry, j) - Math.sin(j * Math.PI) * O.Ry * 0.9; qs = lerp(1, slotS, j);
+        qx = lerp(pxAt(0), 0, j); qy = lerp(py, O.Ry, j) - Math.sin(j * Math.PI) * O.Ry * 0.9; qs = lerp(1, slotS, j);
         qo = 1 - cl((ms - (T.hop1 - 120)) / 150);
       }
-      const fi = ms < T.push ? Math.floor(ms / 110) % PF : 0;
+      const fi = ms > T.in0 && ms < T.push1 ? Math.floor(ms / 110) % PF : 0;
       pimgs.forEach((im, j) => { im.style.visibility = j === fi ? "visible" : "hidden"; });
       pusher.style.transform = `translate(-50%,-50%) translate(${qx.toFixed(1)}px,${qy.toFixed(1)}px) scale(${qs.toFixed(3)})`;
       pusher.style.opacity = qo.toFixed(3);
@@ -1909,7 +1927,7 @@ const Deck = (() => {
       if (!shownText && sp > 0.8){ shownText = true; root.classList.add("intro-out"); R.shown = -1; showInfo(); }
       if (ms < T.end) requestAnimationFrame(frame);
       else {
-        sun.remove(); svg.remove(); pusher.remove(); badge.style.opacity = "";
+        sun.remove(); svg.remove(); pusher.remove(); shadow.remove(); badge.style.opacity = "";
         root.classList.remove("intro", "intro-out");
         removeEventListener("keydown", finish);
         R.pos = R.target = 0; layout(); showInfo();
