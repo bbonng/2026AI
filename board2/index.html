@@ -1382,7 +1382,7 @@ function toast(msg){
 function unlock(how, from){
   if (Secret.isOpen) return;
   unlocked = true;
-  Secret.open(null, { how, from });
+  Secret.open(null, Object.assign({ how }, from));
 }
 
 // 뒷문: '체육교사 B'를 다섯 번
