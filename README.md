@@ -5,5 +5,6 @@
 - 강의 화면: lecture/
 - 참가자용 업무분장표: board/
 - 코딩 몰라도 OK: okcoding/
-- 내가 묻지 않았던 것들: book/
 - 운영 계획(안): plan/
+
+글 세 편은 bbonng/bstory 저장소에 있습니다.

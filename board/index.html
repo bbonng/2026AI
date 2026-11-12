@@ -187,8 +187,8 @@ body.dk-on{background:#FFFFFF;color-scheme:light}
 .deck .pusher{position:absolute;left:50%;top:50%;z-index:260;pointer-events:none;mix-blend-mode:multiply}
 .deck .pusher img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .deck .pusher.mirror img{transform:scaleX(-1)}
-.deck.intro .k-hero,.deck.intro .k-info,.deck.intro .k-common,.deck.intro .k-note,.deck.intro .arrow,.deck.intro .floor{opacity:0;transition:opacity .5s ease}
-.deck.intro.intro-out .k-hero,.deck.intro.intro-out .k-info,.deck.intro.intro-out .k-common,.deck.intro.intro-out .k-note,.deck.intro.intro-out .arrow,.deck.intro.intro-out .floor{opacity:1}
+.deck.intro .k-hero,.deck.intro .k-info,.deck.intro .k-common,.deck.intro .k-book,.deck.intro .k-note,.deck.intro .arrow,.deck.intro .floor{opacity:0;transition:opacity .5s ease}
+.deck.intro.intro-out .k-hero,.deck.intro.intro-out .k-info,.deck.intro.intro-out .k-common,.deck.intro.intro-out .k-book,.deck.intro.intro-out .k-note,.deck.intro.intro-out .arrow,.deck.intro.intro-out .floor{opacity:1}
 .deck.intro .ring{cursor:default}
 
 
@@ -236,6 +236,12 @@ body.dk-on{background:#FFFFFF;color-scheme:light}
 .deck .k-common .k-premise{grid-column:1/-1;margin:0 0 10px;text-align:center;font-size:clamp(20px,2.4vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1.35;color:var(--k-ink)}
 .deck .k-note{margin:18px 0 0;font-size:12px;color:var(--k-faint);text-align:center}
 .deck .k-note + .k-note{margin-top:4px}
+/* 맨 끝 한 줄 — 돌아가는 길에 읽을 글로 가는 문 */
+.deck .k-book{margin:clamp(36px,6vw,64px) auto 0;padding:26px 0 8px;border-top:1px solid var(--k-line);display:grid;gap:10px;justify-items:center;text-align:center}
+.deck .k-book p{margin:0;font-size:15px;color:var(--k-sub)}
+.deck .k-book a{font-size:clamp(22px,2.6vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.3;color:var(--k-ink);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:7px}
+.deck .k-book a:focus-visible{outline:2px solid currentColor;outline-offset:6px;border-radius:4px}
+.deck .k-book small{font-size:12px;color:var(--k-faint)}
 
 
 .deck .s-scene{display:grid;grid-template-columns:minmax(260px,40%) 1fr;gap:clamp(18px,3vw,44px);padding:clamp(18px,3vw,34px) 0 10px;align-items:start}
@@ -1742,12 +1748,14 @@ const Deck = (() => {
     SCENES.forEach((sc, i) => { const d = h("button"); d.type = "button"; d.setAttribute("aria-label", flat(sc.q)); d.addEventListener("click", () => spinTo(i)); dots.appendChild(d); });
     info.append(q, meths, cta, dots);
     root.appendChild(info);
+    root.appendChild(h("p", "k-note", "다들 처음 하는 말과, 이렇게 바꾸면 달라지는 말을 보여 드립니다. 실제 대화를 줄여서 옮겼어요."));
     const com = h("div", "k-common");
     com.appendChild(h("p", "k-premise", "AI도 틀립니다. 다 믿지 마십시오.<br>이상하면 다시 물으십시오."));
     [["해 줘", "'해 줄 수 있어?'라고 물으면 방법만 설명합니다."], ["안 되면 솔직하게", "AI는 기본적으로 '됩니다'라고 합니다."], ["처음 온 선생님처럼", "그분이 읽고 일할 수 있게 쓰면 AI도 압니다."], ["이유도 같이", "규칙보다 이유를 주면 더 넓게 알아듣습니다."]]
       .forEach(([t, d]) => com.appendChild(h("div", null, `<b>${esc(t)}</b>${esc(d)}`)));
     root.appendChild(com);
-    root.appendChild(h("p", "k-note", "다들 처음 하는 말과, 이렇게 바꾸면 달라지는 말을 보여 드립니다. 실제 대화를 줄여서 옮겼어요."));
+    const bk = h("div", "k-book", `<p>제가 AI에게 가장 많이 한 말은 이거였습니다.</p><a href="https://bbonng.github.io/bstory/3/" target="_blank" rel="noopener">“아니, 그게 아니고.” <span aria-hidden="true">→</span></a><small>돌아가는 길에 읽을 글</small>`);
+    root.appendChild(bk);
 
     R = { ring, items, q, meths, dots, pos: start || 0, target: start || 0, raf: 0, shown: -1, moved: false };
     if (from && !reduce) intro(from); else { layout(); showInfo(); }
