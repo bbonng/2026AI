@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 대화 강의 스토리보드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* 강의 화면과 같은 세계: 흰 종이, 검은 펜, 주황 한 색. 왼쪽 화면 · 오른쪽 말. 한 가지 테마만 씀 */
+  --paper:#fbfaf7; --sheet:#ffffff; --ink:#1d1d1f; --soft:#5d5b57; --line:#d9d6cf;
+  --accent:#e2572b; --accent-bg:#fdeee7; --alt-bg:#f1f0ec;
+  --display:"Gaegu","Nanum Pen Script","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px}
+header.top{padding:28px 0 8px}
+header.top h1{font-family:var(--display);font-weight:700;font-size:40px;line-height:1.15;margin:0;text-wrap:balance}
+header.top p{margin:6px 0 0;color:var(--soft);font-size:15px}
+header.top .by{font-family:var(--display);font-size:20px;color:var(--accent)}
+nav.bar{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:2px solid var(--ink);display:flex;gap:6px;align-items:center;padding:10px 0;overflow-x:auto}
+nav.bar a{flex:none;font-family:var(--display);font-size:21px;font-weight:700;color:var(--ink);text-decoration:none;padding:2px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--sheet)}
+nav.bar a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+nav.bar button{flex:none;margin-left:auto;font:600 14px var(--body);color:var(--sheet);background:var(--ink);border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+details.prep{margin:18px 0 0;border:2px solid var(--ink);border-radius:10px;background:var(--sheet);padding:10px 16px}
+details.prep summary{font-family:var(--display);font-size:22px;font-weight:700;cursor:pointer}
+details.prep ul{margin:8px 0 6px;padding-left:20px;font-size:16px}
+h2.sec{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin:44px 0 6px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.sec-name{font-family:var(--display);font-size:34px;font-weight:700;line-height:1.1}
+.sec-time{font:600 16px var(--body);color:var(--accent);font-variant-numeric:tabular-nums}
+.sec-note{font:400 15px var(--body);color:var(--soft)}
+.row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:24px;padding:20px 0;border-bottom:1px solid var(--line)}
+.left{min-width:0}
+.frame{border:2px solid var(--ink);border-radius:8px;overflow:hidden;background:var(--sheet);aspect-ratio:16/9}
+.frame img{display:block;width:100%;height:100%;object-fit:cover}
+.screen{margin:6px 2px 0;font-size:14px;color:var(--soft);line-height:1.45}
+.ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:repeating-linear-gradient(135deg,var(--alt-bg) 0 14px,var(--sheet) 14px 28px)}
+.ph b{font-family:var(--display);font-size:32px;background:var(--sheet);padding:0 12px;border:2px solid var(--ink);border-radius:8px}
+.ph span{font-size:14px;color:var(--soft);background:var(--sheet);padding:0 8px}
+.meta{display:flex;gap:8px;align-items:center}
+.click{font:600 14px var(--body);font-variant-numeric:tabular-nums;border:2px solid var(--ink);border-radius:6px;padding:1px 9px;background:var(--sheet)}
+.row.alt .click{background:var(--ink);color:var(--sheet)}
+.row.off .click{background:var(--accent);border-color:var(--accent);color:var(--sheet)}
+.draft{font:500 12px var(--body);color:var(--soft);border:1px dashed var(--soft);border-radius:6px;padding:1px 7px}
+.cue{font-family:var(--display);font-weight:700;font-size:34px;line-height:1.2;margin:8px 0 8px;text-wrap:balance}
+.say p{margin:0 0 8px;font-size:19px;line-height:1.65;max-width:34em}
+.act{margin:0 0 10px;padding:8px 12px 8px 30px;background:var(--alt-bg);border-radius:8px;font-size:16px;line-height:1.55}
+.tip{margin:8px 0 0;padding:6px 12px;background:var(--accent-bg);border-left:4px solid var(--accent);border-radius:0 6px 6px 0;font-size:15px;color:var(--ink);max-width:36em}
+body.cues .say,body.cues .tip,body.cues .screen{display:none}
+body.cues .row{padding:12px 0}
+footer{margin-top:40px;color:var(--soft);font-size:14px}
+footer b{font-family:var(--display);font-size:20px;color:var(--ink)}
+@media (max-width:720px){
+  .row{grid-template-columns:1fr;gap:10px}
+  header.top h1{font-size:32px}.cue{font-size:28px}.say p{font-size:17px}.sec-name{font-size:28px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>학생 상담보다 쉬운 AI 대화</h1>
+  <p>강의 스토리보드 · 11. 27.(금) · 내 몫 40분 (슬라이드 약 13분 + 실습 27분) <span class="by">Teacher B</span></p>
+</header>
+<nav class="bar" aria-label="구간 이동">
+  <a href="#start">시작</a><a href="#seung">승</a><a href="#jeon">전</a><a href="#check">확인</a><a href="#gyeol">결</a><a href="#practice">실습</a><a href="#close">B 공개</a>
+  <button type="button" id="toggle" aria-pressed="false">큐만 보기</button>
+</nav>
+<details class="prep">
+  <summary>시작 전에 해 둘 것</summary>
+  <ul><li>점수판 첫 문장을 메모장에 써 두고 강의 직전에 복사</li><li>시연용 새 Claude 계정 로그인, 새 대화 열어 두기</li><li>미리 만든 점수판 탭 하나 열어 두기 (와이파이가 느릴 때)</li><li>스피커 소리 확인 (AI 목소리, 칠판 소리)</li><li>강의 화면은 미리 열어 두기 (약 15MB)</li><li>두 번째 조 시작 전: Home 키, Claude 새 대화</li></ul>
+</details>
+<main>
+<h2 class="sec" id="start"><span class="sec-name">시작</span><span class="sec-time">0~3분</span><span class="sec-note">영상 1분 48초 + 점수판 보내기</span></h2>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c01.jpg" alt="영상: 대문 → 제목 → 밤 책상 → 「세특 써 줘」" loading="lazy" width="960" height="540"></div><p class="screen">영상: 대문 → 제목 → 밤 책상 → 「세특 써 줘」</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 1</span></div><p class="cue">말 없음</p><div class="say"><p>Teacher B 음성이 인사와 자기소개를 합니다. 영상이 「세특 써 줘」에서 멈출 때까지 기다립니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c01.jpg" alt="「세특 써 줘」에서 멈춘 화면" loading="lazy" width="960" height="540"></div><p class="screen">「세특 써 줘」에서 멈춘 화면</p></div>
+<div class="right"><div class="meta"><span class="click">영상 끝</span></div><p class="cue">방금 목소리, 제가 아닙니다</p><div class="say"><p>방금 목소리, 제가 아닙니다. AI입니다. 안녕하십니까, 이길봉입니다.</p><p>말로만 하면 안 믿으실 테니까, 시작 전에 AI한테 일 하나 시켜 놓고 가겠습니다.</p></div></div></article>
+<article class="row alt"><div class="left"><div class="frame"><div class="ph ph-claude"><b>Claude 창</b><span>Alt+Tab으로 넘어간 화면</span></div></div><p class="screen">Claude 새 대화</p></div>
+<div class="right"><div class="meta"><span class="click">Alt+Tab</span></div><p class="cue">첫 문장 붙여 넣고 Enter</p><ul class="act"><li>메모장에 복사해 둔 첫 문장 붙여 넣기 → Enter</li><li>바로 Alt+Tab으로 강의 화면에 돌아오기</li></ul><div class="say"></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c02.jpg" alt="보낸 문장이 써지고 타이머 시작" loading="lazy" width="960" height="540"></div><p class="screen">보낸 문장이 써지고 타이머 시작</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 2</span></div><p class="cue">되는지 먼저 물었습니다</p><div class="say"><p>체육관 TV에 띄울 피구 점수판입니다. 저는 되는지 먼저 묻고, 되면 만들어 달라고 했습니다.</p><p>이건 이따 보겠습니다.</p></div><p class="tip">바꾼 대사: 「만들어 줘라고 안 했습니다」 → 「되는지 먼저 묻고, 되면 만들어 달라고 했습니다」</p></div></article>
+<h2 class="sec" id="seung"><span class="sec-name">승 · 반 편성</span><span class="sec-time">3~6분</span><span class="sec-note">「됩니다」를 바꾼 건 제 한마디</span></h2>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c03.jpg" alt="두들: 2월 밤, 엑셀과 휴대폰" loading="lazy" width="960" height="540"></div><p class="screen">두들: 2월 밤, 엑셀과 휴대폰</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 3</span></div><p class="cue">시작은 수업이 아니었습니다</p><div class="say"><p>시작은 수업이 아니었습니다. 올해 2월, 신입생 반 편성을 발표해야 했어요.</p><p>학생들이 휴대폰으로 자기 반만 확인할 수 있게 하고 싶었습니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c07.jpg" alt="대화창 네 줄이 한 줄씩 (클릭 네 번)" loading="lazy" width="960" height="540"></div><p class="screen">대화창 네 줄이 한 줄씩 (클릭 네 번)</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 4~7</span></div><p class="cue">제 한마디에 답이 바뀌었습니다</p><div class="say"><p>(화면의 대화를 한 줄씩 읽기)</p><p>AI는 처음에 &quot;됩니다&quot;라고 했습니다. 그런데 제 한마디에 답이 바뀌었어요.</p><p>저는 코딩은 몰랐지만, 반 편성 명단이 모두에게 공개되는 순간 무슨 일이 닥칠지는 알고 있었습니다. 누가 누구랑 같은 반인지까지 다 드러나면 학기가 시작되기도 전에 큰일이 납니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c08.jpg" alt="글자: &quot;됩니다&quot;를 바꾼 건, 제 한마디였습니다." loading="lazy" width="960" height="540"></div><p class="screen">글자: &quot;됩니다&quot;를 바꾼 건, 제 한마디였습니다.</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 8</span></div><p class="cue">(멈춤)</p><div class="say"><p>읽지 않고 잠깐 멈춥니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c09.jpg" alt="두들: 휴대폰 위로 안내장이 쌓임" loading="lazy" width="960" height="540"></div><p class="screen">두들: 휴대폰 위로 안내장이 쌓임</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 9</span></div><p class="cue">방금 보신 그 안내장이 이겁니다</p><div class="say"><p>그 뒤로는 습관이 됐습니다. 행사가 생기면 &quot;자, 또 하나 뚝딱 만들어 보자.&quot;</p><p>공감 프로젝트 안내, 학폭 설문 안내, 체육대회 안내… 방금 임대관 선생님 이야기에서 보신 그 안내장이 이겁니다.</p></div><p class="tip">넣은 대사: 앞 강의(임대관 선생님)와 잇는 한마디</p></div></article>
+<h2 class="sec" id="jeon"><span class="sec-name">전 · 공간작전판</span><span class="sec-time">6~11분</span><span class="sec-note">배움을 만드는 도구도 「됩니다」</span></h2>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c10.jpg" alt="두들: 운동장, 태블릿에 펜" loading="lazy" width="960" height="540"></div><p class="screen">두들: 운동장, 태블릿에 펜</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 10</span><span class="draft">초안</span></div><p class="cue">내 수업을 바꿔 보고 싶었습니다</p><div class="say"><p>1학기까지 AI로 만든 건 대부분 평가 도구였습니다. 학생이 휴대폰으로 수행평가를 확인하는 시스템, 교육과정 문서들.</p><p>그러다 한 번쯤 내 수업을 바꿔 보고 싶었습니다. 그래서 물었습니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c12.jpg" alt="글자: 아이들의 배움을 만드는 도구도, 될까? → 됩니다." loading="lazy" width="960" height="540"></div><p class="screen">글자: 아이들의 배움을 만드는 도구도, 될까? → 됩니다.</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 11~12</span><span class="draft">초안</span></div><p class="cue">이번에도 AI는… 됩니다</p><div class="say"><p>내 수업에서 아이들의 배움을 만드는 도구도 만들 수 있을까.</p><p>(클릭) 이번에도 AI는… &quot;됩니다.&quot;</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c13.jpg" alt="공간작전판 녹화 (40~60초)" loading="lazy" width="960" height="540"></div><p class="screen">공간작전판 녹화 (40~60초)</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 13</span></div><p class="cue">이 버전이 나온 이유는 아이들입니다</p><div class="say"><p>수비 대형을 고르고, 라우트를 긋고, 실행하면 3D로 넘어가 QB 눈으로 던집니다.</p><p>이 버전이 나온 이유는 아이들입니다. 실제 경기에서 먹힌 작전이 판에서는 5야드도 못 가서 아이들이 속상해했거든요. 그래서 QB가 움직이게 고쳤습니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c14.jpg" alt="녹화가 두들 태블릿으로 돌아감" loading="lazy" width="960" height="540"></div><p class="screen">녹화가 두들 태블릿으로 돌아감</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 14</span></div><p class="cue">말 없음</p><div class="say"><p>화면이 돌아올 때까지 기다립니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c15.jpg" alt="글자: 전 코딩을 모릅니다." loading="lazy" width="960" height="540"></div><p class="screen">글자: 전 코딩을 모릅니다.</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 15</span></div><p class="cue">전 코딩을 모릅니다</p><div class="say"><p>이걸 누가 만들었을까요. 전 코딩을 모릅니다. 바이브코딩도 배운 적 없습니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c16.jpg" alt="글자: 하지만, 만들었습니다." loading="lazy" width="960" height="540"></div><p class="screen">글자: 하지만, 만들었습니다.</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 16</span></div><p class="cue">(멈춤)</p><div class="say"><p>읽지 않고 잠깐 멈춥니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c18.jpg" alt="두들: 학생 상담 vs AI 대화 → 제목 글자" loading="lazy" width="960" height="540"></div><p class="screen">두들: 학생 상담 vs AI 대화 → 제목 글자</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 17~18</span></div><p class="cue">확인은 제 몫입니다</p><div class="say"><p>어떻게 만들었냐고요? 대화로 만들었습니다. 제목 기억하시죠.</p><p>학생 상담은 어렵습니다. 무섭게만 할 수도 없고, 달래기만 한다고 되는 것도 아니고요.</p><p>그런데 AI는 거짓말을 할지언정 &quot;못 한다&quot;, &quot;안 한다&quot;는 말은 안 합니다. 말하면 바로 시작합니다. 그래서 확인은 제 몫입니다. 아까 그 F12처럼요.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c21.jpg" alt="두들: 달력·모래시계 → 6월~ → 3시간" loading="lazy" width="960" height="540"></div><p class="screen">두들: 달력·모래시계 → 6월~ → 3시간</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 19~21</span><span class="draft">초안</span></div><p class="cue">오래 걸린 건 저였습니다</p><div class="say"><p>그리고, 공간작전판은 6월부터 석 달 걸렸고 지금도 고치고 있습니다. 작전 설계도는 3시간이 안 걸렸습니다.</p><p>뚝딱 만드는 건 쉬워졌습니다. 오래 걸린 건 AI가 아니라 저였습니다.</p></div><p class="tip">1분 안에 지나가기. 화면 타이머가 10분을 넘었으면 이 장면은 클릭만 하고 건너뜁니다.</p></div></article>
+<h2 class="sec" id="check"><span class="sec-name">확인 · 점수판</span><span class="sec-time">11~13분</span><span class="sec-note">시켜 놓은 것 열어 보기</span></h2>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c22.jpg" alt="타이머가 멈추고 걸린 시간이 써짐" loading="lazy" width="960" height="540"></div><p class="screen">타이머가 멈추고 걸린 시간이 써짐</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 22</span><span class="draft">초안</span></div><p class="cue">아까 시켜 놓은 거 보겠습니다</p><div class="say"><p>제가 떠드는 동안 AI는 만들고 있었습니다. 아까 시켜 놓은 거 보겠습니다.</p></div></div></article>
+<article class="row alt"><div class="left"><div class="frame"><div class="ph ph-claude"><b>Claude 창</b><span>Alt+Tab으로 넘어간 화면</span></div></div><p class="screen">Claude: ① 점수판 열기 → ② 보내기</p></div>
+<div class="right"><div class="meta"><span class="click">Alt+Tab</span><span class="draft">초안</span></div><p class="cue">청팀 홍팀, 전체화면</p><ul class="act"><li>점수판을 열어 눌러 보이기 (인원이 줄어드는지)</li><li>② 보내기: 「청팀 홍팀 고치고 바로 아티팩트에서 전체화면으로 화면 띄울 수 있게 하자」</li><li>기다리지 않고 Alt+Tab으로 돌아오기</li></ul><div class="say"><p>이게 첫 문장 하나로 나온 겁니다. 그런데 한 번에 끝나지 않습니다. 하나 고쳐 보겠습니다.</p><p>이것도 시켜 놓고 가겠습니다.</p></div><p class="tip">고치는 동안 기다리지 않습니다. 업무분장표 체험 시간이 곧 기다리는 시간입니다.</p></div></article>
+<h2 class="sec" id="gyeol"><span class="sec-name">결 · 업무분장표</span><span class="sec-time">13~18분</span><span class="sec-note">QR 체험 사이에 점수판 고치기</span></h2>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c23.jpg" alt="두들: 노트북을 펴는 캐릭터" loading="lazy" width="960" height="540"></div><p class="screen">두들: 노트북을 펴는 캐릭터</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 23</span></div><p class="cue">제가 만든 걸 보시죠</p><div class="say"><p>제가 만든 걸 보시죠.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c24.jpg" alt="체육교사 업무분장표 + QR" loading="lazy" width="960" height="540"></div><p class="screen">체육교사 업무분장표 + QR</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 24</span></div><p class="cue">칸을 하나씩 눌러 보세요</p><ul class="act"><li>주소 전달: 화면 QR 또는 오픈채팅방</li></ul><div class="say"><p>체육교사 업무분장표입니다. 수업, 스포츠클럽, 체육대회, 체육과 업무. 선생님들도 매년 하시는 일들이죠.</p><p>칸을 하나씩 눌러 보세요.</p><p>(체험 뒤) 1분만 더 보시고 넘어가겠습니다.</p></div></div></article>
+<article class="row alt"><div class="left"><div class="frame"><div class="ph ph-claude"><b>Claude 창</b><span>Alt+Tab으로 넘어간 화면</span></div></div><p class="screen">Claude: ② 결과 보기 → ③ 보내기</p></div>
+<div class="right"><div class="meta"><span class="click">Alt+Tab</span><span class="draft">초안</span></div><p class="cue">유니폼 색까지</p><ul class="act"><li>전체화면으로 띄워 보이기</li><li>③ 보내기: 「색깔 지정까지 하자. 학생들이 유니폼 입고 오면 그걸로 보여 주고 싶어」</li><li>Alt+Tab으로 돌아오기</li></ul><div class="say"><p>보시는 동안 고쳐 놨습니다. 청팀 홍팀, 전체화면.</p><p>하나만 더 하겠습니다. 학생들이 유니폼을 입고 오면 그 색으로 보여 주고 싶습니다.</p></div></div></article>
+<article class="row slide"><div class="left"><div class="frame"><img src="shots/c26.jpg" alt="글자: 별거일 수 있지만, 아닙니다. → 대화만 잘하면, 여러분도." loading="lazy" width="960" height="540"></div><p class="screen">글자: 별거일 수 있지만, 아닙니다. → 대화만 잘하면, 여러분도.</p></div>
+<div class="right"><div class="meta"><span class="click">클릭 25~26</span></div><p class="cue">대화만 잘하면 여러분도</p><div class="say"><p>이런 것도 만들었습니다. 별거일 수 있지만, 아닙니다.</p><p>(클릭) 대화만 잘하면 여러분도 됩니다.</p></div></div></article>
+<article class="row alt"><div class="left"><div class="frame"><div class="ph ph-claude"><b>Claude 창</b><span>Alt+Tab으로 넘어간 화면</span></div></div><p class="screen">Claude: ③ 결과 보기</p></div>
+<div class="right"><div class="meta"><span class="click">Alt+Tab</span><span class="draft">초안</span></div><p class="cue">부저 소리는 남겨 둡니다</p><ul class="act"><li>유니폼 색을 바꿔 보이기</li></ul><div class="say"><p>색깔 들어왔습니다. 한 번에 나온 게 아닙니다. 이렇게 하나씩 말로 고친 겁니다.</p><p>부저 소리는 아직 없습니다. 이건 남겨 두겠습니다.</p></div><p class="tip">부저 소리는 일부러 남겨 둡니다. 마지막 정리에서 숙제로 다시 꺼냅니다.</p></div></article>
+<h2 class="sec" id="practice"><span class="sec-name">실습</span><span class="sec-time">18~33분</span><span class="sec-note">슬라이드 없음 · Claude 화면</span></h2>
+<article class="row off"><div class="left"><div class="frame"><div class="ph ph-hands"><b>참가자 화면</b><span>슬라이드 없음</span></div></div><p class="screen">참가자 화면: 각자 노트북·휴대폰의 AI</p></div>
+<div class="right"><div class="meta"><span class="click">실습 1</span><span class="draft">초안</span></div><p class="cue">이제 선생님들 차례입니다</p><ul class="act"><li>첫 문장 전달: 오픈채팅방에 올리거나 강의 화면 클릭 2 장면 다시 띄우기</li><li>돌아다니며 로그인이 안 된 분 돕기</li></ul><div class="say"><p>이제 선생님들 차례입니다. 제가 처음에 보낸 그 문장, 그대로 보내 보십시오.</p><p>(5분 뒤) 화면에 점수판 나오신 분? 그게 선생님이 만든 겁니다.</p></div><p class="tip">참가자가 직접 결과를 받아 보는 순간입니다. 여기까지 5분.</p></div></article>
+<article class="row off"><div class="left"><div class="frame"><div class="ph ph-claude"><b>Claude 창</b><span>Alt+Tab으로 넘어간 화면</span></div></div><p class="screen">Claude: 주문받아 같이 만들기</p></div>
+<div class="right"><div class="meta"><span class="click">실습 2</span><span class="draft">초안</span></div><p class="cue">뭘 만들어 볼까요?</p><ul class="act"><li>주문 두세 개 받고 하나 고르기</li><li>노트북 있는 분은 같은 문장을 따라 치기</li><li>주문이 크면: 「15분 안에 보여 줄 수 있게 제일 작은 판부터 만들어 줘」</li><li>학생 실명은 넣지 않고 예시 이름으로</li></ul><div class="say"><p>뭘 만들어 볼까요? 시간 안에는 안 되겠지만 한번 해 보실까요?</p><p>화면 하나에서 끝나는 것으로 하나만 골라 주십시오.</p><p>(첫 문장을 같이 쓰기) 누가 쓰는지, 어디에 띄우는지, 무엇이 보여야 하는지.</p><p>(끊기) 시간 안에는 다 안 됩니다. 여기서부터가 집에서 하실 일입니다.</p></div></div></article>
+<h2 class="sec" id="close"><span class="sec-name">B 공개 · 정리</span><span class="sec-time">33~40분</span><span class="sec-note">집에서 이어 할 것</span></h2>
+<article class="row off"><div class="left"><div class="frame"><div class="ph ph-board"><b>업무분장표</b><span>참가자 화면과 같은 주소</span></div></div><p class="screen">업무분장표에 B 쓰기 → 시크릿 화면</p></div>
+<div class="right"><div class="meta"><span class="click">B 공개</span><span class="draft">초안</span></div><p class="cue">화면에 B를 써 보십시오</p><ul class="act"><li>선생님이 먼저 써 보이기</li><li>안내장 장면 하나만 같이 보기 (여덟 장면 다 보지 않기)</li></ul><div class="say"><p>마지막으로 선물 하나 드리겠습니다. 아까 그 업무분장표 화면에 손가락으로 B를 써 보십시오.</p><p>안내장 장면 하나만 같이 보겠습니다. 나머지는 집에서 보십시오.</p></div></div></article>
+<article class="row off"><div class="left"><div class="frame"><div class="ph ph-board"><b>업무분장표</b><span>참가자 화면과 같은 주소</span></div></div><p class="screen">시크릿 화면 그대로</p></div>
+<div class="right"><div class="meta"><span class="click">정리</span><span class="draft">초안</span></div><p class="cue">집에서 이거 보고 한번 해 보십시오</p><div class="say"><p>시간이 짧았습니다. 집에서 이거 보고 한번 해 보십시오.</p><p>아까 점수판에 부저 소리가 없었죠. 그건 선생님들이 넣어 보십시오. AI도 틀립니다. 이상하면 다시 물으시면 됩니다.</p><p>맨 아래에 돌아가는 길에 읽으실 글도 하나 넣어 두었습니다. 고맙습니다.</p></div></div></article>
+</main>
+<footer><p>큰 글씨가 큐, 아래가 대사입니다. 「초안」 표시는 아직 선생님 말로 고치지 않은 문장입니다. <b>Teacher B</b></p></footer>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('toggle');
+  b.addEventListener('click',function(){
+    var on=document.body.classList.toggle('cues');
+    b.setAttribute('aria-pressed',on?'true':'false');
+    b.textContent=on?'대사도 보기':'큐만 보기';
+  });
+})();
+</script>
+</body>
+</html>
