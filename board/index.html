@@ -1670,6 +1670,29 @@ const SCENES = [
   ],
 },
 {
+  id: "hwp", img: "img/b-hwp.png",
+  q: "한글 파일로\n받고 싶으십니까?",
+  first: "\"[양식 파일 경로]\" 이 양식대로 [문서 이름] 만들어 줘. 표와 서식은 그대로 두고, 한글 파일(hwpx)로 저장해 줘. 다 만들고 다시 열어서 깨진 곳이 있는지 확인해 줘.",
+  link: { href: "https://bbonng.github.io/2026AI/kordoc/", text: "선물 영상과 설치 안내서 ↗" },
+  beats: [
+    { say: "다들 이렇게 시작합니다." },
+    { type: [{ t: "매화제 운영 계획서 한글 파일로 만들어 줘" }] },
+    { send: 1 },
+    { ai: { html: `<div class="pv-memo"><p>한글 파일은 바로 만들기 어려워서 Word 파일로 만들었어요.</p><p><span class="file" id="mk-docx">운영계획서.docx</span></p></div>` } },
+    { mark: "mk-docx", hook: "한글이 아닙니다.", sub: "학교 양식을 읽지 못하니까요." },
+    { fresh: 1 },
+    { gap: "코독(kordoc)을 깐 뒤, Claude 앱에서" },
+    { type: [{ n: 1, tag: "양식은 파일 위치 그대로", t: "\"C:\\학교\\계획서 양식.hwpx\"\n이 양식대로 매화제 운영 계획서 만들어 줘." }] },
+    { type: [{ n: 2, tag: "서식은 그대로, 한글로", t: "표와 서식은 그대로 두고, 한글 파일(hwpx)로 저장해 줘." }] },
+    { type: [{ n: 3, tag: "다시 열어 확인시키기", t: "다 만들고 다시 열어서 깨진 곳이 있는지 확인해 줘." }] },
+    { send: 1 },
+    { ai: { html: `<div class="pv-memo"><p>양식을 읽고 그 양식대로 만들었어요. 다시 열어 보니 표 한 칸이 넘쳐서 고쳤어요.</p><p><span class="file">매화제 운영 계획(안).hwpx</span></p></div>` }, hook: "양식 그대로,\n한글 파일로 나옵니다." },
+    { type: [{ t: "좋아. 이 방식 기억해 둬." }] },
+    { send: 1 },
+    { ai: { text: "기억해 둘게요. 다음부터는 양식만 주시면 같은 방식으로 만들게요." }, hook: "처음 한 번만\n깔아 두면 됩니다." },
+  ],
+},
+{
   id: "long", img: "img/b-long.png",
   q: "대화가\n길어지셨습니까?",
   first: "대화가 길어졌으니 여기서 끊자. 새 대화에서 바로 이어 할 수 있게 정리해 줘: 지금 있는 것 / 바꾸면 안 되는 원칙 / 다음에 할 일.",
@@ -2163,7 +2186,7 @@ const Deck = (() => {
   return { open, close, get isOpen(){ return isOpen; } };
 })();
 
-if (PUBLIC && /^#b[1-7]?$/.test(location.hash)){ const n = +location.hash.slice(2); opened = true; render(); Deck.open(n ? n - 1 : null); }
+if (PUBLIC && /^#b[1-9]?$/.test(location.hash)){ const n = +location.hash.slice(2); opened = true; render(); Deck.open(n ? n - 1 : null); }
 </script>
 
 

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI한테 한글 파일로 받는 법</title>
+<meta name="description" content="코독(kordoc) 선물 영상과 설치 안내서">
+<meta property="og:title" content="AI한테 한글 파일로 받는 법">
+<meta property="og:description" content="코독(kordoc) 선물 영상과 설치 안내서">
+<meta property="og:image" content="https://bbonng.github.io/2026AI/kordoc/poster.jpg">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+:root{--ink:#1b1b1b;--coral:#ee6a3c;--soft:#fff3ec;--gray:#6b6b6b;--paper:#fff;--ok:#2e9e5b;--ok-soft:#eaf7ef}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;color:var(--ink);background:var(--paper);
+  background-image:radial-gradient(#e2dfd8 1.1px,transparent 1.3px);background-size:22px 22px;line-height:1.65}
+main{max-width:620px;margin:0 auto;padding:28px 18px calc(40px + env(safe-area-inset-bottom,0px))}
+.tag{display:inline-block;border:2px solid var(--ink);border-radius:99px;padding:3px 14px;font-size:13px;font-weight:700;background:var(--soft)}
+h1{font-size:clamp(30px,8.4vw,42px);font-weight:900;letter-spacing:-1px;line-height:1.2;margin:16px 0 6px}
+h1 em{font-style:normal;color:var(--coral)}
+.lead{font-size:16px;font-weight:700;margin:0 0 20px}
+.card{background:#fff;border:2.2px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);padding:20px 20px 18px;margin:0 0 26px}
+h2{font-size:20px;font-weight:900;letter-spacing:-.5px;margin:0 0 10px}
+p{margin:0 0 8px;font-size:15.5px}
+.video{padding:0;overflow:hidden;background:#fff}
+.video video{display:block;width:100%;aspect-ratio:9/16;background:#fff}
+.video .cap{padding:12px 18px 14px;border-top:2.2px solid var(--ink);font-size:14px;color:var(--gray)}
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+ol.steps>li{counter-increment:s;position:relative;padding:0 0 14px 46px;font-size:15.5px}
+ol.steps>li:last-child{padding-bottom:0}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:-2px;width:34px;height:34px;border-radius:50%;
+  background:var(--coral);color:#fff;border:2px solid var(--ink);font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center}
+ol.steps b{font-weight:900}
+ol.steps small{display:block;font-size:13.5px;color:var(--gray)}
+.term{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;background:#1f2430;color:#eef3ff;border:2px solid var(--ink);border-radius:12px;padding:10px 10px 10px 14px;margin:8px 0 4px}
+.term code{flex:1 1 auto;font-family:Consolas,'D2Coding',ui-monospace,monospace;font-size:clamp(15px,4.4vw,17px);white-space:nowrap}
+button,.btn{font:inherit;cursor:pointer}
+.copy{flex:none;border:2px solid #eef3ff;background:transparent;color:#eef3ff;border-radius:99px;padding:6px 14px;font-size:14px;font-weight:700;min-height:40px}
+.copy.done{background:#eef3ff;color:#1f2430}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:54px;border:2.2px solid var(--ink);border-radius:14px;
+  background:var(--coral);color:#fff;font-size:17px;font-weight:900;text-decoration:none;box-shadow:4px 4px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn small{font-weight:500;font-size:13px;opacity:.9}
+.note{font-size:13.5px;color:var(--gray);margin:10px 0 0}
+.prompt{border:2px dashed var(--coral);border-radius:12px;padding:10px 14px;margin:8px 0;font-size:15px;background:#fff}
+.warn{border-left:5px solid var(--coral);background:var(--soft);padding:12px 16px;border-radius:0 10px 10px 0;font-size:15px;margin:0 0 26px}
+.foot{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--gray)}
+.foot b{color:var(--ink);font-weight:900;font-size:15px;white-space:nowrap;margin-left:auto}
+.foot a{color:inherit}
+:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.btn:active{transform:none}}
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">2026 AI 활용 사례 연수 · 선물</span>
+  <h1>AI한테<br><em>한글 파일</em>로 받는 법</h1>
+  <p class="lead">코독(kordoc) · 10분, 한 번만 하면 끝</p>
+
+  <section class="card video" aria-label="선물 영상">
+    <video controls playsinline preload="none" poster="poster.jpg" src="kordoc.mp4"></video>
+    <div class="cap">1분 20초 · 소리가 납니다</div>
+  </section>
+
+  <section class="card">
+    <h2>설치 4단계</h2>
+    <ol class="steps">
+      <li><b>Claude 데스크톱 앱 설치</b><small>claude.ai/download → Windows용. 웹 말고 꼭 앱이어야 해요.</small></li>
+      <li><b>Node.js 설치</b><small>nodejs.org → LTS 받기 → 계속 Next</small></li>
+      <li><b>명령 프롬프트(cmd)에 한 줄</b><small>윈도우 키 → cmd 입력 → 열고 붙여넣기 → Enter</small>
+        <div class="term"><code id="cmd">npx -y kordoc setup</code><button class="copy" type="button" data-copy="npx -y kordoc setup">복사</button></div>
+        <small>PowerShell 말고 명령 프롬프트(cmd)로 하세요.</small></li>
+      <li><b>Claude 앱 완전히 껐다 켜기</b><small>Ctrl+Shift+Esc → Claude → 작업 끝내기 → 다시 실행</small></li>
+    </ol>
+  </section>
+
+  <a class="btn" href="kordoc-guide.pdf" download="코독_설치안내서.pdf">설치 안내서 PDF 받기 <small>4쪽</small></a>
+  <p class="note" style="margin-bottom:26px">막힐 때 해결법과 처음 써 보는 방법이 들어 있어요.</p>
+
+  <section class="card">
+    <h2>깔고 나서 이렇게</h2>
+    <p>양식 파일을 마우스 오른쪽 클릭 → "경로로 복사"한 뒤 붙여 넣고 부탁하세요.</p>
+    <div class="prompt">"C:\학교\계획서 양식.hwpx" 이 양식대로 ○○ 운영 계획서 만들어 줘. 표와 서식은 그대로 두고, 한글 파일(hwpx)로 저장해 줘.</div>
+    <p>마음에 들게 나오면 한마디: <b style="color:var(--coral)">"이 방식 기억해 둬."</b></p>
+  </section>
+
+  <div class="warn"><b>학생 개인정보가 담긴 문서는 올리지 마세요.</b> 이름·연락처는 지우거나 ○○로 바꿔서 쓰세요.</div>
+
+  <div class="foot"><span>코독은 무료 공개 프로그램입니다 · <a href="https://github.com/chrisryugj/kordoc" target="_blank" rel="noopener">github.com/chrisryugj/kordoc</a></span><b>Teacher B</b></div>
+</main>
+<script>
+document.querySelectorAll('.copy').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy');
+    function ok(){b.textContent='복사됨';b.classList.add('done');setTimeout(function(){b.textContent='복사';b.classList.remove('done');},1600);}
+    function fallback(){var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');ok();}catch(e){}a.remove();}
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fallback);} else fallback(); }catch(e){fallback();}
+  });
+});
+</script>
+</body>
+</html>
