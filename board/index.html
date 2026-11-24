@@ -335,6 +335,11 @@ body.dk-on{background:#FFFFFF;color-scheme:light}
 .deck .endbar .first small{display:block;font-size:12px;color:var(--k-sub);margin-bottom:3px}
 .deck .endbar .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .deck .endbar .row a{color:var(--k-blue);font-size:14px}
+.deck .endbar .row a.dl{font-weight:600;border-radius:999px;padding:9px 18px;background:var(--k-wash);color:var(--k-ink);text-decoration:none}
+.vlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.84);display:grid;place-items:center;padding:16px}
+.vlay .vbox{display:grid;gap:12px;justify-items:center}
+.vlay video{display:block;height:min(84vh,calc((100vw - 32px)*16/9));aspect-ratio:9/16;border-radius:14px;background:#FFFFFF}
+.vlay .vx{font:inherit;font-size:15px;font-weight:600;border:0;border-radius:999px;padding:10px 26px;background:#FFFFFF;color:#111111;cursor:pointer}
 .deck .endbar button{font:inherit;font-size:14px;font-weight:600;border-radius:999px;padding:9px 18px;cursor:pointer;border:0;background:var(--k-wash);color:var(--k-ink)}
 .deck .endbar button.primary{background:var(--k-blue);color:#FFFFFF}
 .deck .endbar .tips b{font-size:14px}
@@ -1673,7 +1678,9 @@ const SCENES = [
   id: "hwp", img: "img/b-hwp.png",
   q: "한글 파일로\n받고 싶으십니까?",
   first: "\"[양식 파일 경로]\" 이 양식대로 [문서 이름] 만들어 줘. 표와 서식은 그대로 두고, 한글 파일(hwpx)로 저장해 줘. 다 만들고 다시 열어서 깨진 곳이 있는지 확인해 줘.",
-  link: { href: "https://bbonng.github.io/2026AI/kordoc/", text: "선물 영상과 설치 안내서 ↗" },
+  video: { src: "../kordoc/kordoc.mp4", poster: "../kordoc/poster.jpg" },
+  pdf: { href: "../kordoc/kordoc-guide.pdf", name: "코독_설치안내서.pdf" },
+  link: { href: "https://bbonng.github.io/2026AI/kordoc/", text: "설치 순서 보기 ↗" },
   beats: [
     { say: "다들 이렇게 시작합니다." },
     { type: [{ t: "매화제 운영 계획서 한글 파일로 만들어 줘" }] },
@@ -2166,10 +2173,28 @@ const Deck = (() => {
     cp.addEventListener("click", e => { e.stopPropagation(); copyText(sc.first, cp); setTimeout(() => { cp.textContent = "첫 마디 복사"; }, 1700); });
     const nx = h("button", null, S.i < N - 1 ? "다음 장면" : "처음으로"); nx.type = "button";
     nx.addEventListener("click", e => { e.stopPropagation(); if (S.i < N - 1) play(S.i + 1); else { home(0); window.scrollTo(0, 0); } });
+    if (sc.video){
+      const vb = h("button", "primary", "선물 영상 보기"); vb.type = "button"; cp.classList.remove("primary");
+      vb.addEventListener("click", e => { e.stopPropagation(); showVideo(sc.video, vb); });
+      row.appendChild(vb);
+    }
+    if (sc.pdf){ const pa = h("a", "dl", "설치 안내서 PDF"); pa.href = sc.pdf.href; pa.setAttribute("download", sc.pdf.name); pa.addEventListener("click", e => e.stopPropagation()); row.appendChild(pa); }
     row.append(cp, nx);
     if (sc.link){ const a = h("a", null, esc(sc.link.text.replace(/\s*↗$/, ""))); a.href = sc.link.href; a.target = "_blank"; a.rel = "noopener"; row.appendChild(a); }
     bar.appendChild(row);
     S.chat.querySelector(".composer").replaceWith(bar);
+  }
+
+  function showVideo(v, from){
+    const lay = h("div", "vlay", `<div class="vbox"><video controls playsinline poster="${esc(v.poster)}" src="${esc(v.src)}"></video><button type="button" class="vx">닫기</button></div>`);
+    lay.setAttribute("role", "dialog"); lay.setAttribute("aria-label", "선물 영상");
+    document.body.appendChild(lay);
+    const vid = lay.querySelector("video"), x = lay.querySelector(".vx");
+    const key = e => { e.stopPropagation(); if (e.key === "Escape"){ e.preventDefault(); off(); } };
+    function off(){ document.removeEventListener("keydown", key, true); try { vid.pause(); vid.removeAttribute("src"); vid.load(); } catch (err){} lay.remove(); if (from) from.focus(); }
+    document.addEventListener("keydown", key, true);
+    ["pointerdown", "click"].forEach(t => lay.addEventListener(t, e => { e.stopPropagation(); if (t === "click" && (e.target === lay || e.target === x)) off(); }));
+    x.focus(); const pr = vid.play(); if (pr && pr.catch) pr.catch(() => {});
   }
 
   document.addEventListener("keydown", e => {
