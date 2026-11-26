@@ -1424,6 +1424,15 @@ function reveal(how, from){
   });
 })();
 
+document.addEventListener("keydown", e => {
+  if (!PUBLIC || Deck.isOpen || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+  if (e.target.closest && e.target.closest("input,textarea")) return;
+  if (!$("#chat").hidden) return;
+  if (e.code !== "KeyB" && e.key !== "b" && e.key !== "B") return;
+  const sig = document.querySelector(".head .who b");
+  reveal("tap", sig ? { rect: sig.getBoundingClientRect() } : {});
+});
+
 (() => {
   if (!PUBLIC) return;
   const cv = document.createElement("canvas"); cv.id = "ink"; cv.setAttribute("aria-hidden", "true");
